@@ -37,7 +37,7 @@ class User(db.Model):
 
 class DanceStyles(Enum):
     KPOP = 'K-Pop'
-    HIP HOP = 'Hip Hop'
+    HIPHOP = 'Hip Hop'
     FOUNDATIONS = 'Foundations'
 
 class DanceLevels(Enum):
@@ -83,7 +83,7 @@ class ClassInstance(db.Model):
     # remove after implementing usertype conditions
     instructor =  db.Column(db.String, nullable=False)
     studio =  db.Column(db.String, nullable=False)
-    
+
     
     class_id = db.Column(db.Integer, db.ForeignKey("class_event.class_id"))
 
@@ -91,7 +91,7 @@ class ClassInstance(db.Model):
     class_event = db.relationship("ClassEvent", back_populates="class_instance")
 
     def __repr__(self):
-        return f'<ClassInstance classinst_id={self.classinst_id} type_name={self.type_name}>'
+        return f'<ClassInstance classinst_id={self.classinst_id} date={self.date} instructor={self.instructor} studio={self.studio}>'
 
 
 

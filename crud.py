@@ -31,7 +31,7 @@ def get_user_by_email(email):
 
 # CLASS EVENT-RELATED
 
-def create_classevent(start_date, end_date, start_time, end_time, price):
+def create_classevent(start_date, end_date, start_time, end_time, price, style, level):
     """Create and return a new class event."""
 
     return ClassEvent(
@@ -52,7 +52,7 @@ def get_classevent():
 
 # CLASS INSTANCE-RELATED
 
-def create_classinstance(date, start_time, end_time, price):
+def create_classinstance(date, start_time, end_time, price, style, level, instructor, studio):
     """Create and return a new class instance."""
 
     return ClassInstance(
