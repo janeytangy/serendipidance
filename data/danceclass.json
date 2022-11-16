@@ -1,0 +1,112 @@
+[
+    {
+        "date": "2023-01-07",
+        "start_time": "19:30",
+        "end_time": "21:30",
+        "price": "35",
+        "style": "K-Pop",
+        "level": "Beginner",
+        "instructor": "Qingqing Yang",
+        "studio": "Enjoy Dance Studio"
+    },
+    {
+        "date": "2023-01-04",
+        "start_time": "20:00",
+        "end_time": "22:00",
+        "price": "35",
+        "style": "Hip Hop",
+        "level": "Intermediate",
+        "instructor": "Alex Kahng",
+        "studio": "Enjoy Dance Studio"
+    },
+    {
+        "date": "2023-01-04",
+        "start_time": "20:00",
+        "end_time": "21:00",
+        "price": "18",
+        "style": "Hip Hop",
+        "level": "Advanced",
+        "instructor": "Arvin Valmonte",
+        "studio": "In the Groove Studios"
+    },
+    {
+        "date": "2023-01-07",
+        "start_time": "18:00",
+        "end_time": "20:00",
+        "price": "50",
+        "style": "Hip Hop",
+        "level": "Master",
+        "instructor": "Beom",
+        "studio": "In the Groove Studios"
+    },
+    {
+        "date": "2023-01-05",
+        "start_time": "19:15",
+        "end_time": "20:30",
+        "price": "28",
+        "style": "K-Pop",
+        "level": "Beginner",
+        "instructor": "Michelle Chen",
+        "studio": "City Dance Studios"
+    },
+    {
+        "date": "2023-01-02",
+        "start_time": "20:15",
+        "end_time": "21:45",
+        "price": "16",
+        "style": "Hip Hop",
+        "level": "Intermediate",
+        "instructor": "Daniel Kang",
+        "studio": "On One Studios"
+    },
+    {
+        "date": "2023-01-02",
+        "start_time": "19:30",
+        "end_time": "21:30",
+        "price": "35",
+        "style": "K-Pop",
+        "level": "Advanced",
+        "instructor": "Nana",
+        "studio": "Enjoy Dance Studio"
+    },
+    {
+        "date": "2023-01-02",
+        "start_time": "20:00",
+        "end_time": "21:00",
+        "price": "20",
+        "style": "Foundations",
+        "level": "All Levels",
+        "instructor": "Qingqing Yang",
+        "studio": "In the Groove Studios"
+    },
+    {
+        "date": "2023-01-03",
+        "start_time": "18:30",
+        "end_time": "19:45",
+        "price": "28",
+        "style": "Foundations",
+        "level": "All Levels",
+        "instructor": "Qingqing Yang",
+        "studio": "City Dance Studios"
+    },
+    {
+        "date": "2023-01-03",
+        "start_time": "19:30",
+        "end_time": "20:30",
+        "price": "50",
+        "style": "Hip Hop",
+        "level": "Master",
+        "instructor": "Tarzan",
+        "studio": "In the Groove Studios"
+    },
+    {
+        "date": "2023-01-04",
+        "start_time": "18:30",
+        "end_time": "19:30",
+        "price": "16",
+        "style": "Hip Hop",
+        "level": "Advanced",
+        "instructor": "Alex Kahng",
+        "studio": "On One Studios"
+    }
+]
