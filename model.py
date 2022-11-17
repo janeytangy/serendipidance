@@ -35,17 +35,17 @@ class User(db.Model):
         return f'<User user_id={self.user_id} fname={self.fname} lname={self.lname} email={self.email}>'
 
 
-class DanceStyles(Enum):
-    KPOP = 'K-Pop'
-    HIPHOP = 'Hip Hop'
-    FOUNDATIONS = 'Foundations'
+# class DanceStyles(Enum):
+#     KPOP = 'K-Pop'
+#     HIPHOP = 'Hip Hop'
+#     FOUNDATIONS = 'Foundations'
 
-class DanceLevels(Enum):
-    ALL = 'All Levels'
-    BEGINNER = 'Beginner'
-    INTERMEDIATE = 'Intermediate'
-    ADVANCED = 'Advanced'
-    MASTER = 'Master'
+# class DanceLevels(Enum):
+#     ALL = 'All Levels'
+#     BEGINNER = 'Beginner'
+#     INTERMEDIATE = 'Intermediate'
+#     ADVANCED = 'Advanced'
+#     MASTER = 'Master'
 
 class ClassEvent(db.Model):
     """Dance Class Event"""
@@ -58,8 +58,8 @@ class ClassEvent(db.Model):
     start_time =  db.Column(db.DateTime, nullable=False)
     end_time =  db.Column(db.DateTime, nullable=False)
     price = db.Column(db.Integer, nullable=False)
-    style = db.Column(db.Enum(DanceStyles))
-    level = db.Column(db.Enum(DanceLevels))
+    style = db.Column(db.String, nullable=False)
+    level = db.Column(db.String, nullable=False)
 
     user_id = db.Column(db.Integer, db.ForeignKey("user.user_id"))
 
@@ -77,8 +77,8 @@ class ClassInstance(db.Model):
     start_time =  db.Column(db.DateTime, nullable=False)
     end_time =  db.Column(db.DateTime, nullable=False)
     price = db.Column(db.Integer, nullable=False)
-    style = db.Column(db.Enum(DanceStyles))
-    level = db.Column(db.Enum(DanceLevels))
+    style = db.Column(db.String, nullable=False)
+    level = db.Column(db.String, nullable=False)
 
     # remove after implementing usertype conditions
     instructor =  db.Column(db.String, nullable=False)
@@ -91,7 +91,18 @@ class ClassInstance(db.Model):
     class_event = db.relationship("ClassEvent", back_populates="class_instance")
 
     def __repr__(self):
-        return f'<ClassInstance classinst_id={self.classinst_id} date={self.date} instructor={self.instructor} studio={self.studio}>'
+        return f'<ClassInstance classinst_id={self.classinst_id} date={self.date} level={self.level}>'
+
+    def to_dict(self):
+        return {'classinst_id': self.classinst_id,
+                'date': self.date,
+                'start_time': self.start_time,
+                'end_time': self.end_time,
+                'price': self.price,
+                'style': self.style,
+                'level': self.level,
+                'instructor': self.instructor,
+                'studio': self.studio}
 
 
 

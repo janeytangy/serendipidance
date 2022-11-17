@@ -32,7 +32,8 @@ for dance in danceclass_data:
         dance["level"],
         dance["instructor"],
         dance["studio"])
-    
+
+
     date = datetime.strptime(dance["date"], "%Y-%m-%d")
     start_time = datetime.strptime(dance["start_time"], "%H:%M")
     end_time = datetime.strptime(dance["end_time"], "%H:%M")
