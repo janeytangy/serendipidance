@@ -15,6 +15,18 @@ def homepage():
 
     return render_template("homepage.html")
 
+@app.route("/<path>")
+def login(path):
+    """Login"""
+
+    return render_template("homepage.html")
+
+@app.route("/<user_id>")
+def user_portal():
+    """User can view dashboard"""
+
+    return render_template("dashboard.html")
+
 @app.route('/api/classinstances')
 def get_class_instances():
     classinstances = ClassInstance.query.all()

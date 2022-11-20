@@ -5,7 +5,7 @@ Seed the Database
 import os
 import json
 from random import choice, randint
-from datetime import datetime
+import datetime
 
 import crud
 import model
@@ -34,9 +34,9 @@ for dance in danceclass_data:
         dance["studio"])
 
 
-    date = datetime.strptime(dance["date"], "%Y-%m-%d")
-    start_time = datetime.strptime(dance["start_time"], "%H:%M")
-    end_time = datetime.strptime(dance["end_time"], "%H:%M")
+    date = datetime.datetime.strptime(dance["date"], "%Y-%m-%d")
+    start_time = datetime.datetime.strptime(dance["start_time"], "%H:%M")
+    end_time = datetime.datetime.strptime(dance["end_time"], "%H:%M")
 
     danceclass_in_db.append(crud.create_classinstance(date, 
             start_time, end_time, price, style, level, instructor, studio))
