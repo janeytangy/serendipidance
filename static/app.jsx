@@ -2,7 +2,7 @@ function App() {
     const [classinstances, setClass] = React.useState({});
   
     React.useEffect(() => {
-      fetch('/api/classinstances')
+      fetch("/api/classinstances")
         .then((response) => response.json())
         .then((classData) => {
           setClass(classData);
@@ -21,7 +21,6 @@ function App() {
             <Login />
           </ReactRouterDOM.Route>
           <ReactRouterDOM.Route exact path="/create">
-            <UserInfo />
             <CreateAccount />
           </ReactRouterDOM.Route>
         </div>

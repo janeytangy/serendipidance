@@ -8,7 +8,7 @@ from model import (db,
 
 # USER-RELATED
 
-def create_user(email, password):
+def create_user(fname, lname, email, password):
     """Create and return a new user."""
 
     return User(fname=fname, lname=lname, email=email, password=password)

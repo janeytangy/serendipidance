@@ -33,6 +33,13 @@ class User(db.Model):
 
     def __repr__(self):
         return f'<User user_id={self.user_id} fname={self.fname} lname={self.lname} email={self.email}>'
+    
+    def to_dict(self):
+        return {'user_id': self.user_id,
+                'fname': self.fname,
+                'lname': self.lname,
+                'email': self.email
+                }
 
 
 # class DanceStyles(Enum):

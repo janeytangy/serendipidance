@@ -154,27 +154,78 @@ function Login(props) {
 }
 
 function CreateAccount(props) {
+    const [fname, setFName] = React.useState("");
+    const [lname, setLName] = React.useState("");
+    const [email, setEmail] = React.useState("");
+    const [password, setPassword] = React.useState("");
+
+    const [values, setValues] = React.useState({
+        password: "",
+        showPassword: false,
+      });
+
+    let handleSubmit = (evt) => {
+        evt.preventDefault();
+
+        let users = fetch("/create", {
+            method: "POST",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+              },
+            body: JSON.stringify({
+                fname: fname,
+                lname: lname,
+                email: email,
+                password: password,
+            }),
+        });
+
+        setFName("");
+        setLName("");
+        setEmail("");
+        setPassword("");
+
+        
+
+        // const newEmail = document.querySelector('#email').value;
+
+        // for (const user of users) {
+        //     if (user.email == newEmail){
+                
+        //     }
+        // }
+    }
+
 
     return (
-        <form>
+        <form onSubmit={handleSubmit}>
             <label>
                 Create Account
             </label>
             <label>
                 First Name:
-                <input type="text" name="first-name" />
+                <input type="text"  id="fname" name="fname" onChange={(evt) => setFName(evt.target.value)} />
             </label>
             <label>
                 Last Name:
-                <input type="text" name="last-name" />
+                <input type="text" id="lname" name="lname" onChange={(evt) => setLName(evt.target.value)}  />
             </label>
             <label>
                 Account Type:
                 <select>
-                    <option selected value="student">Student</option>
+                    <option defaultValue="student">Student</option>
                     <option value="instructor">Instructor</option>
                     <option value="studio">Studio</option>
                 </select>
+            </label>
+            <label>
+                Email:
+                <input type="text" id="email" name="email" onChange={(evt) => setEmail(evt.target.value)} />
+            </label>
+            <label>
+                Password:
+                <input type={values.showPassword ? "text" : "password"} id="password" name="password" onChange={(evt) => setPassword(evt.target.value)} />
             </label>
             <input type="submit" value="Submit" />
         </form>
