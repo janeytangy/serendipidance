@@ -1,6 +1,6 @@
 function App() {
     const [classinstances, setClass] = React.useState({});
-    // const [users, setUsers] = React.useState({});
+    const [users, setUsers] = React.useState({});
     const [schedule, setSchedule] = React.useState({});
   
     React.useEffect(() => {
@@ -11,13 +11,13 @@ function App() {
         });
     }, []);
 
-    // React.useEffect(() => {
-    //     fetch("/api/users")
-    //     .then((response) => response.json())
-    //     .then((userData) => {
-    //       setUsers(userData);
-    //     });
-    // }, []);
+    React.useEffect(() => {
+        fetch("/api/users")
+        .then((response) => response.json())
+        .then((userData) => {
+          setUsers(userData);
+        });
+    }, []);
 
     function addClassToSchedule(classId) {
 
@@ -46,6 +46,9 @@ function App() {
           <Navbar />
           <ReactRouterDOM.Route exact path="/">
             <AllClasses classinstances={classinstances} addClassToSchedule={addClassToSchedule} />
+          </ReactRouterDOM.Route>
+          <ReactRouterDOM.Route exact path="/all-users">
+            <AllUsers users={users} />
           </ReactRouterDOM.Route>
           <ReactRouterDOM.Route exact path="/login">
             <Login />

@@ -34,14 +34,16 @@ def login():
     if user:
         if user.password == password:
             session['user'] = user.user_id
-            flash('Logged In!')
-            return 'Logged In!'
+            return jsonify({
+                "id": user.user_id,
+                "email": user.email
+            })
+
         else:
-            flash('Your password is incorrect.')
-            return 'Your password is incorrect.'
+            return jsonify({'error': 'Incorrect password.' }), 401
+
     else:
-        flash('Your username is incorrect. Please input a valid username & password.')
-        return 'Your username is incorrect. Please input a valid username & password.'
+        return jsonify({'error': 'Incorrect username & password.' }), 401
 
 
     
@@ -58,12 +60,16 @@ def create_account():
     user = crud.get_user_by_email(email)
 
     if user:
-        flash('Sorry, that email is already being used. Please try again with a different email.') 
+        return jsonify({'error': 'Sorry, that email is already being used. Please try again with a different email.' }), 401
     else:
         user = crud.create_user(fname, lname, email, password)
         db.session.add(user)
         db.session.commit()
-        flash('Congratulations, your account has been created and you can now login!')
+        return jsonify({
+                "id": user.user_id,
+                "email": user.email
+            })
+
     return redirect("/")
 
     

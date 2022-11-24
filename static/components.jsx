@@ -98,6 +98,69 @@ function AllClasses(props) {
   }
 
 
+  function AllUsers(props) {
+    const { users, setUsers } = props;
+    const allUsers = [];
+  
+    for (const user of Object.values(users)) {
+      const userRow = (
+        <UserRow
+          id={user.user_id}
+          fname={user.fname}
+          lname={user.lname}
+          email={user.email}
+        />
+      );
+  
+      allUsers.push(userRow);
+    }
+  
+    return (
+      <React.Fragment key={users.id}>
+        <h2>Users</h2>
+        <div id="users">
+            <div>
+                <table className="users">
+                    <thead>
+                        <tr>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Email</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {allUsers}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+      </React.Fragment>
+    );
+  }
+
+
+  function UserRow(props) {
+    const { id, fname, lname, email } = props;
+
+    return (
+        <React.Fragment>
+            <tr key={id}>
+                <td>
+                    <span className="fname">{fname}</span>
+                </td>
+                <td>
+                    <span className="lname">{lname}</span>
+                </td>
+                <td>
+                    <span className="email">{email}</span>
+                </td>
+            </tr>
+      </React.Fragment>
+    );
+  }
+
+
+
 function Schedule(props) {
     const { schedule, classinstances } = props;
     const tableData = [];
@@ -157,6 +220,17 @@ function Navbar(props) {
           Home
         </ReactRouterDOM.NavLink>
         </h4>
+
+        <h4>
+        <ReactRouterDOM.NavLink
+          to="/all-users"
+          activeClassName="navlink-active"
+          className="nav-link"
+        >
+          All Users (Testing)
+        </ReactRouterDOM.NavLink>
+        </h4>
+
         <h4>
         <ReactRouterDOM.NavLink
           to="/login"
@@ -206,6 +280,7 @@ function Navbar(props) {
 function Login(props) {
     const [email, setEmail] = React.useState("");
     const [password, setPassword] = React.useState("");
+    const [userSession, setUserSession] = React.useState("");
 
     const [values, setValues] = React.useState({
         password: "",
@@ -227,6 +302,14 @@ function Login(props) {
             }),
         });
 
+        if(checkUser.status===200){
+            location.reload();
+            setUserSession(email);
+            alert("You are logged in!")
+        } else if (checkUser.status===401){
+            setUserSession("")
+            alert(checkUser.email)
+        }
     };
 
     return (
@@ -256,7 +339,6 @@ function CreateAccount(props) {
     const [lname, setLName] = React.useState("");
     const [email, setEmail] = React.useState("");
     const [password, setPassword] = React.useState("");
-    // const [message, setMessage] = React.useState("");
 
     const [values, setValues] = React.useState({
         password: "",
@@ -280,15 +362,12 @@ function CreateAccount(props) {
             }),
         });
 
-        // if (newUser.status === 201) {
-        //     setFName("");
-        //     setLName("");
-        //     setEmail("");
-        //     setPassword("");
-        //     setMessage("User created successfully");
-        // } else {
-        //     setMessage("Some error occured");
-        // }
+        if(newUser.status===200){
+            location.reload();
+            alert("Congratulations, your account has been created and you can now login!");
+        } else if (newUser.status===401) {
+            alert("Sorry, that email is already being used. Please try again with a different email.");
+        }
     };
 
 
@@ -322,7 +401,6 @@ function CreateAccount(props) {
                 <input type={values.showPassword ? "text" : "password"} id="password" name="password" onChange={(evt) => setPassword(evt.target.value)} />
             </label>
             <input type="submit" value="Submit" />
-            {/* <div className="message">{message ? <p>{message}</p> : null}</div> */}
         </form>
 
     )
