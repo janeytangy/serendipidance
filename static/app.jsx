@@ -31,6 +31,7 @@ function App() {
             
         } else {
             newSchedule[classId] = 1;
+            document.querySelector('#add-to-schedule').innerText = "Added";
         }
 
         return newSchedule;

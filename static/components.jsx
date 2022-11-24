@@ -33,6 +33,7 @@ function ClassRow(props) {
                 </td>
                 <td>
                     <button
+                        id="add-to-schedule"
                         type="button"
                         className="btn btn-sm btn-success d-inline-block"
                         onClick={() => handleAddClass(id)}
@@ -101,14 +102,14 @@ function Schedule(props) {
     const { schedule, classinstances } = props;
     const tableData = [];
     // let totalCost = 0;
+
     for (const classinst_id in schedule) {
+
         const newClass = classinstances[classinst_id];
-        // const melonCost = cart[melonId] * currentMelon.price;
-        // totalCost += melonCost;
+
         tableData.push(
         <tr key={classinst_id}>
             <td>{newClass.date}</td>
-            <td>{schedule[classinst_id]}</td>
             {/* <td>${melonCost.toFixed(2)}</td> */}
             <td>
                     <button
@@ -121,6 +122,7 @@ function Schedule(props) {
         </tr>,
         );
     }
+
     return (
         <React.Fragment>
         <h1>My Schedule</h1>
