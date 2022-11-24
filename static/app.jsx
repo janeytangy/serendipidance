@@ -1,6 +1,7 @@
 function App() {
     const [classinstances, setClass] = React.useState({});
-    const [users, setUsers] = React.useState({});
+    // const [users, setUsers] = React.useState({});
+    const [schedule, setSchedule] = React.useState({});
   
     React.useEffect(() => {
       fetch("/api/classinstances")
@@ -17,6 +18,24 @@ function App() {
     //       setUsers(userData);
     //     });
     // }, []);
+
+    function addClassToSchedule(classId) {
+
+        setSchedule((currentSchedule) => {
+  
+        const newSchedule = { ...currentSchedule };
+
+        if (newSchedule[classId]) {
+            alert("You have already added this class to your schedule.")
+        // } else if (newSchedule[classId].start_time) {
+            
+        } else {
+            newSchedule[classId] = 1;
+        }
+
+        return newSchedule;
+        });
+    }
     
     
   
@@ -25,7 +44,7 @@ function App() {
         <div className="container-fluid">
           <Navbar />
           <ReactRouterDOM.Route exact path="/">
-            <AllClasses classinstances={classinstances} />
+            <AllClasses classinstances={classinstances} addClassToSchedule={addClassToSchedule} />
           </ReactRouterDOM.Route>
           <ReactRouterDOM.Route exact path="/login">
             <Login />
@@ -34,7 +53,7 @@ function App() {
             <CreateAccount />
           </ReactRouterDOM.Route>
           <ReactRouterDOM.Route exact path="/schedule">
-            <Schedule />
+            <Schedule schedule={schedule} classinstances={classinstances} />
           </ReactRouterDOM.Route>
         </div>
       </ReactRouterDOM.BrowserRouter>

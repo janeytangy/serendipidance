@@ -2,7 +2,7 @@
 
 
 function ClassRow(props) {
-    const { id, date, start_time, end_time, price, style, level, instructor, studio, addToSchedule } = props;
+    const { id, date, start_time, end_time, price, style, level, instructor, studio, handleAddClass } = props;
 
     return (
         <React.Fragment>
@@ -35,7 +35,7 @@ function ClassRow(props) {
                     <button
                         type="button"
                         className="btn btn-sm btn-success d-inline-block"
-                        onClick={() => addToSchedule(id)}
+                        onClick={() => handleAddClass(id)}
                     >
                         Add to Schedule
                     </button>
@@ -61,7 +61,7 @@ function AllClasses(props) {
           level={classinstance.level}
           instructor={classinstance.instructor}
           studio={classinstance.studio}
-          addToSchedule={addClassToSchedule}
+          handleAddClass={addClassToSchedule}
         />
       );
   
@@ -110,6 +110,14 @@ function Schedule(props) {
             <td>{newClass.date}</td>
             <td>{schedule[classinst_id]}</td>
             {/* <td>${melonCost.toFixed(2)}</td> */}
+            <td>
+                    <button
+                        type="button"
+                        className="btn btn-sm btn-success d-inline-block"
+                    >
+                        Remove from Schedule
+                    </button>
+                </td>
         </tr>,
         );
     }
@@ -120,9 +128,7 @@ function Schedule(props) {
             <table className="table">
             <thead>
                 <tr>
-                <th></th>
-                <th></th>
-                <th></th>
+                <th>Date</th>
                 </tr>
             </thead>
             <tbody>{tableData}</tbody>
