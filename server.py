@@ -16,34 +16,57 @@ def homepage():
     return render_template("homepage.html")
 
 @app.route("/<path>")
-def login(path):
+def dashboard(path):
+    """Dashboard"""
+    
+    return render_template("homepage.html")
+
+
+@app.route("/login", methods=['POST'])
+def login():
     """Login"""
 
-    return render_template("homepage.html")
+    email = request.json.get('email')
+    password = request.json.get('password')
+
+    user = crud.get_user_by_email(email)
+
+    if user:
+        if user.password == password:
+            session['user'] = user.user_id
+            flash('Logged In!')
+            return 'Logged In!'
+        else:
+            flash('Your password is incorrect.')
+            return 'Your password is incorrect.'
+    else:
+        flash('Your username is incorrect. Please input a valid username & password.')
+        return 'Your username is incorrect. Please input a valid username & password.'
+
+
+    
 
 @app.route("/create", methods=['POST'])
 def create_account():
     """Create New Account"""
 
-    fname = request.get_json(force=True).get('fname')
-    lname = request.get_json(force=True).get('lname')
-    email = request.get_json(force=True).get('email')
-    password = request.get_json(force=True).get('password')
-
-    print('*'*35)
-    print('fname=', fname, ' lname=', lname, ' email=', email, ' password=', password)
+    fname = request.json.get('fname')
+    lname = request.json.get('lname')
+    email = request.json.get('email')
+    password = request.json.get('password')
 
     user = crud.get_user_by_email(email)
 
     if user:
-        flash('Sorry, that email is already being used. Please try again with a different email.')
+        flash('Sorry, that email is already being used. Please try again with a different email.') 
     else:
         user = crud.create_user(fname, lname, email, password)
         db.session.add(user)
         db.session.commit()
         flash('Congratulations, your account has been created and you can now login!')
-
     return redirect("/")
+
+    
 
 @app.route('/api/classinstances')
 def get_class_instances():

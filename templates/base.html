@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width">
-    <link rel="stylesheet" href="/static/styles.css">
+    <!-- <link rel="stylesheet" href="/static/styles.css"> -->
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
     <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
@@ -13,17 +13,19 @@
     </title>
 
     {% block head %}{% endblock %}
+    
+    {% for msg in get_flashed_messages() %}
+    <p class="flash-msg">
+      {{ msg }}
+    </p>
+    {% endfor %}
+    
   </head>
   <body>
-    {% for msg in get_flashed_messages() %}
-      <p class="flash-msg">
-        {{ msg }}
-      </p>
-    {% endfor %}
 
     <script type="text/jsx" src="/static/components.jsx"></script>
     <script type="text/jsx" src="/static/app.jsx"></script>
-    
+
     {% block body %}{% endblock %}
 
     {% block after_body %}{% endblock %}

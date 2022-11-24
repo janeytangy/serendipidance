@@ -1,5 +1,6 @@
 function App() {
     const [classinstances, setClass] = React.useState({});
+    const [users, setUsers] = React.useState({});
   
     React.useEffect(() => {
       fetch("/api/classinstances")
@@ -8,6 +9,16 @@ function App() {
           setClass(classData);
         });
     }, []);
+
+    // React.useEffect(() => {
+    //     fetch("/api/users")
+    //     .then((response) => response.json())
+    //     .then((userData) => {
+    //       setUsers(userData);
+    //     });
+    // }, []);
+    
+    
   
     return (
       <ReactRouterDOM.BrowserRouter>
@@ -17,11 +28,13 @@ function App() {
             <AllClasses classinstances={classinstances} />
           </ReactRouterDOM.Route>
           <ReactRouterDOM.Route exact path="/login">
-            <UserInfo />
             <Login />
           </ReactRouterDOM.Route>
           <ReactRouterDOM.Route exact path="/create">
             <CreateAccount />
+          </ReactRouterDOM.Route>
+          <ReactRouterDOM.Route exact path="/schedule">
+            <Schedule />
           </ReactRouterDOM.Route>
         </div>
       </ReactRouterDOM.BrowserRouter>
@@ -29,3 +42,5 @@ function App() {
   }
   
   ReactDOM.render(<App />, document.querySelector('#class-schedule'));
+
+
