@@ -1,7 +1,8 @@
 function App() {
     const [classinstances, setClass] = React.useState({});
-    const [users, setUsers] = React.useState({});
+    // const [users, setUsers] = React.useState({});
     const [schedule, setSchedule] = React.useState({});
+    const [loggedIn, setLoggedIn] = React.useState(false);
   
     React.useEffect(() => {
       fetch("/api/classinstances")
@@ -11,13 +12,13 @@ function App() {
         });
     }, []);
 
-    React.useEffect(() => {
-        fetch("/api/users")
-        .then((response) => response.json())
-        .then((userData) => {
-          setUsers(userData);
-        });
-    }, []);
+    // React.useEffect(() => {
+    //     fetch("/api/users")
+    //     .then((response) => response.json())
+    //     .then((userData) => {
+    //       setUsers(userData);
+    //     });
+    // }, []);
 
     function addClassToSchedule(classId) {
 
@@ -43,15 +44,16 @@ function App() {
     return (
       <ReactRouterDOM.BrowserRouter>
         <div className="container-fluid">
-          <Navbar />
+          <Navbar loggedIn={loggedIn} />
           <ReactRouterDOM.Route exact path="/">
             <AllClasses classinstances={classinstances} addClassToSchedule={addClassToSchedule} />
           </ReactRouterDOM.Route>
-          <ReactRouterDOM.Route exact path="/all-users">
+          {/* <ReactRouterDOM.Route exact path="/all-users">
             <AllUsers users={users} />
-          </ReactRouterDOM.Route>
+          </ReactRouterDOM.Route> */}
           <ReactRouterDOM.Route exact path="/login">
-            <Login />
+          {loggedIn ? <ReactRouterDOM.Redirect to='/schedule' />:
+            <Login />}
           </ReactRouterDOM.Route>
           <ReactRouterDOM.Route exact path="/create">
             <CreateAccount />

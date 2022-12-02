@@ -31,6 +31,7 @@ def login():
 
     user = crud.get_user_by_email(email)
 
+
     if user:
         if user.password == password:
             session['user'] = user.user_id
@@ -40,10 +41,10 @@ def login():
             })
 
         else:
-            return jsonify({'error': 'Incorrect password.' }), 401
+            return "", "401 Incorrect password."
 
     else:
-        return jsonify({'error': 'Incorrect username & password.' }), 401
+        return "", "401 Incorrect username & password."
 
 
     

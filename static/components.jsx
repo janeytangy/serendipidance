@@ -98,66 +98,66 @@ function AllClasses(props) {
   }
 
 
-  function AllUsers(props) {
-    const { users, setUsers } = props;
-    const allUsers = [];
+//   function AllUsers(props) {
+//     const { users, setUsers } = props;
+//     const allUsers = [];
   
-    for (const user of Object.values(users)) {
-      const userRow = (
-        <UserRow
-          id={user.user_id}
-          fname={user.fname}
-          lname={user.lname}
-          email={user.email}
-        />
-      );
+//     for (const user of Object.values(users)) {
+//       const userRow = (
+//         <UserRow
+//           id={user.user_id}
+//           fname={user.fname}
+//           lname={user.lname}
+//           email={user.email}
+//         />
+//       );
   
-      allUsers.push(userRow);
-    }
+//       allUsers.push(userRow);
+//     }
   
-    return (
-      <React.Fragment key={users.id}>
-        <h2>Users</h2>
-        <div id="users">
-            <div>
-                <table className="users">
-                    <thead>
-                        <tr>
-                            <th>First Name</th>
-                            <th>Last Name</th>
-                            <th>Email</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {allUsers}
-                    </tbody>
-                </table>
-            </div>
-        </div>
-      </React.Fragment>
-    );
-  }
+//     return (
+//       <React.Fragment key={users.id}>
+//         <h2>Users</h2>
+//         <div id="users">
+//             <div>
+//                 <table className="users">
+//                     <thead>
+//                         <tr>
+//                             <th>First Name</th>
+//                             <th>Last Name</th>
+//                             <th>Email</th>
+//                         </tr>
+//                     </thead>
+//                     <tbody>
+//                         {allUsers}
+//                     </tbody>
+//                 </table>
+//             </div>
+//         </div>
+//       </React.Fragment>
+//     );
+//   }
 
 
-  function UserRow(props) {
-    const { id, fname, lname, email } = props;
+//   function UserRow(props) {
+//     const { id, fname, lname, email } = props;
 
-    return (
-        <React.Fragment>
-            <tr key={id}>
-                <td>
-                    <span className="fname">{fname}</span>
-                </td>
-                <td>
-                    <span className="lname">{lname}</span>
-                </td>
-                <td>
-                    <span className="email">{email}</span>
-                </td>
-            </tr>
-      </React.Fragment>
-    );
-  }
+//     return (
+//         <React.Fragment>
+//             <tr key={id}>
+//                 <td>
+//                     <span className="fname">{fname}</span>
+//                 </td>
+//                 <td>
+//                     <span className="lname">{lname}</span>
+//                 </td>
+//                 <td>
+//                     <span className="email">{email}</span>
+//                 </td>
+//             </tr>
+//       </React.Fragment>
+//     );
+//   }
 
 
 
@@ -221,7 +221,7 @@ function Navbar(props) {
         </ReactRouterDOM.NavLink>
         </h4>
 
-        <h4>
+        {/* <h4>
         <ReactRouterDOM.NavLink
           to="/all-users"
           activeClassName="navlink-active"
@@ -229,7 +229,7 @@ function Navbar(props) {
         >
           All Users (Testing)
         </ReactRouterDOM.NavLink>
-        </h4>
+        </h4> */}
 
         <h4>
         <ReactRouterDOM.NavLink
@@ -280,7 +280,6 @@ function Navbar(props) {
 function Login(props) {
     const [email, setEmail] = React.useState("");
     const [password, setPassword] = React.useState("");
-    const [userSession, setUserSession] = React.useState("");
 
     const [values, setValues] = React.useState({
         password: "",
@@ -304,11 +303,10 @@ function Login(props) {
 
         if(checkUser.status===200){
             location.reload();
-            setUserSession(email);
-            alert("You are logged in!")
+            setLoggedIn(true);
+            alert("You are logged in!");
         } else if (checkUser.status===401){
-            setUserSession("")
-            alert(checkUser.email)
+            alert(checkUser.statusText);
         }
     };
 
