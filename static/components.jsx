@@ -206,7 +206,7 @@ function Schedule(props) {
 
 
 
-function Navbar({loggedIn}) {
+function Navbar({loggedIn, handleLogOut}) {
 
   if (loggedIn){
     return (
@@ -244,6 +244,7 @@ function Navbar({loggedIn}) {
             <h4>
             <ReactRouterDOM.NavLink
               to="/"
+              onClick={handleLogOut}
               activeClassName="navlink-active"
               className="nav-link"
             >

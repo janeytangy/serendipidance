@@ -46,6 +46,15 @@ function App() {
         }
     };
 
+
+    let handleLogOut = (evt) => {
+        evt.preventDefault();
+        setLoggedIn(false);
+        setEmail("");
+        setPassword("");
+        console.log(password);
+    };
+
     function addClassToSchedule(classId) {
 
         setSchedule((currentSchedule) => {
@@ -70,7 +79,7 @@ function App() {
     return (
       <ReactRouterDOM.BrowserRouter>
         <div className="container-fluid">
-          <Navbar loggedIn={loggedIn} />
+          <Navbar loggedIn={loggedIn} handleLogOut={handleLogOut} />
           <ReactRouterDOM.Route exact path="/">
             <AllClasses classinstances={classinstances} addClassToSchedule={addClassToSchedule} />
           </ReactRouterDOM.Route>
