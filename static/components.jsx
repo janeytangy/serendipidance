@@ -206,52 +206,92 @@ function Schedule(props) {
 
 
 
-function Navbar(props) {
+function Navbar({loggedIn}) {
 
-  return (
-    <nav>
-      <section>
-        <h4>
-        <ReactRouterDOM.NavLink
-          to="/"
-          activeClassName="navlink-active"
-          className="nav-link"
-        >
-          Home
-        </ReactRouterDOM.NavLink>
-        </h4>
+  if (loggedIn){
+    return (
+        <nav>
+          <section>
+            <h4>
+            <ReactRouterDOM.NavLink
+              to="/"
+              activeClassName="navlink-active"
+              className="nav-link"
+            >
+              Home
+            </ReactRouterDOM.NavLink>
+            </h4>
+    
+            {/* <h4>
+            <ReactRouterDOM.NavLink
+              to="/all-users"
+              activeClassName="navlink-active"
+              className="nav-link"
+            >
+              All Users (Testing)
+            </ReactRouterDOM.NavLink>
+            </h4> */}
+            <h4>
+            <ReactRouterDOM.NavLink
+              to="/schedule"
+              activeClassName="navlink-active"
+              className="nav-link"
+            >
+              My Schedule
+            </ReactRouterDOM.NavLink>
+            </h4>
 
-        {/* <h4>
-        <ReactRouterDOM.NavLink
-          to="/all-users"
-          activeClassName="navlink-active"
-          className="nav-link"
-        >
-          All Users (Testing)
-        </ReactRouterDOM.NavLink>
-        </h4> */}
+            <h4>
+            <ReactRouterDOM.NavLink
+              to="/"
+              activeClassName="navlink-active"
+              className="nav-link"
+            >
+              Log Out
+            </ReactRouterDOM.NavLink>
+            </h4>
+            
+          </section>
+        </nav>
+    );
+  } else {
 
-        <h4>
-        <ReactRouterDOM.NavLink
-          to="/login"
-          activeClassName="navlink-active"
-          className="nav-link"
-        >
-          Sign Up / Login
-        </ReactRouterDOM.NavLink>
-        </h4>
-        <h4>
-        <ReactRouterDOM.NavLink
-          to="/schedule"
-          activeClassName="navlink-active"
-          className="nav-link"
-        >
-          My Schedule
-        </ReactRouterDOM.NavLink>
-        </h4>
-      </section>
-    </nav>
-  );
+    return (
+        <nav>
+        <section>
+            <h4>
+            <ReactRouterDOM.NavLink
+            to="/"
+            activeClassName="navlink-active"
+            className="nav-link"
+            >
+            Home
+            </ReactRouterDOM.NavLink>
+            </h4>
+
+            {/* <h4>
+            <ReactRouterDOM.NavLink
+            to="/all-users"
+            activeClassName="navlink-active"
+            className="nav-link"
+            >
+            All Users (Testing)
+            </ReactRouterDOM.NavLink>
+            </h4> */}
+
+            <h4>
+            <ReactRouterDOM.NavLink
+            to="/login"
+            activeClassName="navlink-active"
+            className="nav-link"
+            >
+            Sign Up / Login
+            </ReactRouterDOM.NavLink>
+            </h4>
+        </section>
+        </nav>
+    );
+  }
 }
 
 
@@ -277,38 +317,14 @@ function Navbar(props) {
 // }
 
 
-function Login(props) {
-    const [email, setEmail] = React.useState("");
-    const [password, setPassword] = React.useState("");
+function Login({handleLogin, setEmail, setPassword}) {
 
     const [values, setValues] = React.useState({
         password: "",
         showPassword: false,
       });
 
-    let handleLogin = async (evt) => {
-        evt.preventDefault();
-
-        let checkUser = await fetch("/login", {
-            method: "POST",
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-              },
-            body: JSON.stringify({
-                email: email,
-                password: password,
-            }),
-        });
-
-        if(checkUser.status===200){
-            location.reload();
-            setLoggedIn(true);
-            alert("You are logged in!");
-        } else if (checkUser.status===401){
-            alert(checkUser.statusText);
-        }
-    };
+    
 
     return (
         <div>
@@ -318,18 +334,17 @@ function Login(props) {
                 </h4>
                 <label>
                 Email:
-                <input type="text" id="email" name="email" onChange={(evt) => setEmail(evt.target.value)} />
+                <input type="text" id="email" name="email" onChange={setEmail} />
                 </label>
                 <label>
                     Password:
-                    <input type={values.showPassword ? "text" : "password"} id="password" name="password" onChange={(evt) => setPassword(evt.target.value)} />
+                    <input type={values.showPassword ? "text" : "password"} id="password" name="password" onChange={setPassword} />
                 </label>
                 <input type="submit" value="Submit" />
             </form>
             <ReactRouterDOM.Link to='/create'>Create A New Account</ReactRouterDOM.Link>
         </div>
-    )
-    
+    );
 }
 
 function CreateAccount(props) {

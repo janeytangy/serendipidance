@@ -2,6 +2,9 @@ function App() {
     const [classinstances, setClass] = React.useState({});
     // const [users, setUsers] = React.useState({});
     const [schedule, setSchedule] = React.useState({});
+
+    const [email, setEmail] = React.useState("");
+    const [password, setPassword] = React.useState("");
     const [loggedIn, setLoggedIn] = React.useState(false);
   
     React.useEffect(() => {
@@ -19,6 +22,29 @@ function App() {
     //       setUsers(userData);
     //     });
     // }, []);
+
+    let handleLogin = async (evt) => {
+        evt.preventDefault();
+
+        let checkUser = await fetch("/login", {
+            method: "POST",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+              },
+            body: JSON.stringify({
+                email: email,
+                password: password,
+            }),
+        });
+
+        if(checkUser.status===200){
+            setLoggedIn(true);
+            alert("You are logged in!");
+        } else if (checkUser.status===401){
+            alert(checkUser.statusText);
+        }
+    };
 
     function addClassToSchedule(classId) {
 
@@ -53,7 +79,9 @@ function App() {
           </ReactRouterDOM.Route> */}
           <ReactRouterDOM.Route exact path="/login">
           {loggedIn ? <ReactRouterDOM.Redirect to='/schedule' />:
-            <Login />}
+            <Login handleLogin={handleLogin}
+            setEmail={(evt) => setEmail(evt.target.value)}
+            setPassword={(evt) => setPassword(evt.target.value)} />}
           </ReactRouterDOM.Route>
           <ReactRouterDOM.Route exact path="/create">
             <CreateAccount />

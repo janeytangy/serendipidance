@@ -30,6 +30,8 @@ def login():
     password = request.json.get('password')
 
     user = crud.get_user_by_email(email)
+    print("*"*35)
+    print(user.password)
 
 
     if user:
