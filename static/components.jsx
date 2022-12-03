@@ -2,52 +2,85 @@
 
 
 function ClassRow(props) {
-    const { id, date, start_time, end_time, price, style, level, instructor, studio, handleAddClass } = props;
+    const { id, date, start_time, end_time, price, style, level, instructor, studio, handleAddClass, loggedIn } = props;
 
-    return (
-        <React.Fragment>
-            <tr key={id}>
-                <td>
-                    <span className="date">{date}</span>
-                </td>
-                <td>
-                    <span className="start time">{start_time}</span>
-                </td>
-                <td>
-                    <span className="end time">{new Date(end_time).getHours()}:{new Date(end_time).getMinutes(2)}</span>
-                </td>
-                <td>
-                    <span className="price">${price.toFixed(2)}</span>
-                </td>
-                <td>
-                    <span className="style">{style}</span>
-                </td>
-                <td>
-                    <span className="level">{level}</span>
-                </td>
-                <td>
-                    <span className="instructor">{instructor}</span>
-                </td>
-                <td>
-                    <span className="studio">{studio}</span>
-                </td>
-                <td>
-                    <button
-                        id="add-to-schedule"
-                        type="button"
-                        className="btn btn-sm btn-success d-inline-block"
-                        onClick={() => handleAddClass(id)}
-                    >
-                        Add to Schedule
-                    </button>
-                </td>
-            </tr>
-      </React.Fragment>
-    );
+    if (loggedIn) {
+        return (
+            <React.Fragment>
+                <tr key={id}>
+                    <td>
+                        <span className="date">{date}</span>
+                    </td>
+                    <td>
+                        <span className="start time">{start_time}</span>
+                    </td>
+                    <td>
+                        <span className="end time">{new Date(end_time).getHours()}:{new Date(end_time).getMinutes(2)}</span>
+                    </td>
+                    <td>
+                        <span className="price">${price.toFixed(2)}</span>
+                    </td>
+                    <td>
+                        <span className="style">{style}</span>
+                    </td>
+                    <td>
+                        <span className="level">{level}</span>
+                    </td>
+                    <td>
+                        <span className="instructor">{instructor}</span>
+                    </td>
+                    <td>
+                        <span className="studio">{studio}</span>
+                    </td>
+                    <td>
+                        <button
+                            id="add-to-schedule"
+                            type="button"
+                            className="btn btn-sm btn-success d-inline-block"
+                            onClick={() => handleAddClass(id)}
+                        >
+                            Add to Schedule
+                        </button>
+                    </td>
+                </tr>
+        </React.Fragment>
+        );
+    } else {
+        return (
+            <React.Fragment>
+                <tr key={id}>
+                    <td>
+                        <span className="date">{date}</span>
+                    </td>
+                    <td>
+                        <span className="start time">{start_time}</span>
+                    </td>
+                    <td>
+                        <span className="end time">{new Date(end_time).getHours()}:{new Date(end_time).getMinutes(2)}</span>
+                    </td>
+                    <td>
+                        <span className="price">${price.toFixed(2)}</span>
+                    </td>
+                    <td>
+                        <span className="style">{style}</span>
+                    </td>
+                    <td>
+                        <span className="level">{level}</span>
+                    </td>
+                    <td>
+                        <span className="instructor">{instructor}</span>
+                    </td>
+                    <td>
+                        <span className="studio">{studio}</span>
+                    </td>
+                </tr>
+        </React.Fragment>
+        );
+    }
   }
 
 function AllClasses(props) {
-    const { classinstances, addClassToSchedule } = props;
+    const { classinstances, addClassToSchedule, loggedIn } = props;
     const classRows = [];
   
     for (const classinstance of Object.values(classinstances)) {
@@ -63,9 +96,10 @@ function AllClasses(props) {
           instructor={classinstance.instructor}
           studio={classinstance.studio}
           handleAddClass={addClassToSchedule}
+          loggedIn={loggedIn}
         />
       );
-  
+        
       classRows.push(classRow);
     }
   

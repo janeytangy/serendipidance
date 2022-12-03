@@ -81,7 +81,7 @@ function App() {
         <div className="container-fluid">
           <Navbar loggedIn={loggedIn} handleLogOut={handleLogOut} />
           <ReactRouterDOM.Route exact path="/">
-            <AllClasses classinstances={classinstances} addClassToSchedule={addClassToSchedule} />
+            <AllClasses classinstances={classinstances} addClassToSchedule={addClassToSchedule} loggedIn={loggedIn} />
           </ReactRouterDOM.Route>
           {/* <ReactRouterDOM.Route exact path="/all-users">
             <AllUsers users={users} />
