@@ -34,8 +34,8 @@ function ClassRow(props) {
                     </td>
                     <td>
                         <button
-                            id="add-to-schedule"
                             type="button"
+                            name="add-to-schedule"
                             className="btn btn-sm btn-success d-inline-block"
                             onClick={() => handleAddClass(id)}
                         >

@@ -6,7 +6,8 @@ function App() {
     const [email, setEmail] = React.useState("");
     const [password, setPassword] = React.useState("");
     const [loggedIn, setLoggedIn] = React.useState(false);
-  
+
+    // Fetch all class instances from rest API
     React.useEffect(() => {
       fetch("/api/classinstances")
         .then((response) => response.json())
@@ -23,6 +24,8 @@ function App() {
     //     });
     // }, []);
 
+
+    // Login & Logout
     let handleLogin = async (evt) => {
         evt.preventDefault();
 
@@ -40,7 +43,6 @@ function App() {
 
         if(checkUser.status===200){
             setLoggedIn(true);
-            alert("You are logged in!");
         } else if (checkUser.status===401){
             alert(checkUser.statusText);
         }
@@ -52,8 +54,23 @@ function App() {
         setLoggedIn(false);
         setEmail("");
         setPassword("");
-        console.log(password);
     };
+
+
+    // Save schedule sessions
+    React.useEffect(() => {
+        const previousSchedule = localStorage.getItem('schedule');
+        if (previousSchedule) {
+        setSchedule(JSON.parse(previousSchedule));
+        }
+    }, []);
+
+    
+    React.useEffect(() => {
+        localStorage.setItem('schedule', JSON.stringify(schedule));
+    }, [schedule]);
+
+
 
     function addClassToSchedule(classId) {
 
@@ -67,7 +84,6 @@ function App() {
             
         } else {
             newSchedule[classId] = 1;
-            document.querySelector('#add-to-schedule').innerText = "Added";
         }
 
         return newSchedule;
@@ -96,7 +112,9 @@ function App() {
             <CreateAccount />
           </ReactRouterDOM.Route>
           <ReactRouterDOM.Route exact path="/schedule">
-            <Schedule schedule={schedule} classinstances={classinstances} />
+          {loggedIn ? 
+            <Schedule schedule={schedule} classinstances={classinstances} />:
+            <ReactRouterDOM.Redirect to='/' />}
           </ReactRouterDOM.Route>
         </div>
       </ReactRouterDOM.BrowserRouter>
