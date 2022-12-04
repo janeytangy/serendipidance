@@ -196,7 +196,7 @@ function AllClasses(props) {
 
 
 function Schedule(props) {
-    const { schedule, classinstances } = props;
+    const { schedule, classinstances, removeClassFromSchedule } = props;
     const tableData = [];
     // let totalCost = 0;
 
@@ -212,6 +212,7 @@ function Schedule(props) {
                     <button
                         type="button"
                         className="btn btn-sm btn-success d-inline-block"
+                        onClick={() => removeClassFromSchedule(classinst_id)}
                     >
                         Remove from Schedule
                     </button>

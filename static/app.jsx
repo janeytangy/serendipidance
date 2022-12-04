@@ -71,22 +71,34 @@ function App() {
     }, [schedule]);
 
 
-
+    // Add to / Remove from schedule
     function addClassToSchedule(classId) {
 
         setSchedule((currentSchedule) => {
   
-        const newSchedule = { ...currentSchedule };
+            const newSchedule = { ...currentSchedule };
 
-        if (newSchedule[classId]) {
-            alert("You have already added this class to your schedule.")
-        // } else if (newSchedule[classId].start_time) {
-            
-        } else {
-            newSchedule[classId] = 1;
-        }
+            if (newSchedule[classId]) {
+                alert("You have already added this class to your schedule.")
+            // } else if (newSchedule[classId].start_time) {
+                
+            } else {
+                newSchedule[classId] = 1;
+            }
 
-        return newSchedule;
+            return newSchedule;
+        });
+    }
+
+    function removeClassFromSchedule(classId) {
+
+        setSchedule((currentSchedule) => {
+  
+            const newSchedule = { ...currentSchedule };
+
+            newSchedule[classId] = 0;
+
+            return newSchedule;
         });
     }
     
@@ -95,27 +107,38 @@ function App() {
     return (
       <ReactRouterDOM.BrowserRouter>
         <div className="container-fluid">
+
           <Navbar loggedIn={loggedIn} handleLogOut={handleLogOut} />
+
           <ReactRouterDOM.Route exact path="/">
-            <AllClasses classinstances={classinstances} addClassToSchedule={addClassToSchedule} loggedIn={loggedIn} />
+            <AllClasses classinstances={classinstances} 
+                addClassToSchedule={addClassToSchedule} 
+                loggedIn={loggedIn} />
           </ReactRouterDOM.Route>
+
           {/* <ReactRouterDOM.Route exact path="/all-users">
             <AllUsers users={users} />
           </ReactRouterDOM.Route> */}
+
           <ReactRouterDOM.Route exact path="/login">
           {loggedIn ? <ReactRouterDOM.Redirect to='/schedule' />:
             <Login handleLogin={handleLogin}
             setEmail={(evt) => setEmail(evt.target.value)}
             setPassword={(evt) => setPassword(evt.target.value)} />}
           </ReactRouterDOM.Route>
+
           <ReactRouterDOM.Route exact path="/create">
             <CreateAccount />
           </ReactRouterDOM.Route>
+
           <ReactRouterDOM.Route exact path="/schedule">
           {loggedIn ? 
-            <Schedule schedule={schedule} classinstances={classinstances} />:
+            <Schedule schedule={schedule} 
+                classinstances={classinstances} 
+                removeClassFromSchedule={removeClassFromSchedule} />:
             <ReactRouterDOM.Redirect to='/' />}
           </ReactRouterDOM.Route>
+
         </div>
       </ReactRouterDOM.BrowserRouter>
     );
