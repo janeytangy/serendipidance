@@ -200,13 +200,17 @@ function Schedule(props) {
     const tableData = [];
     // let totalCost = 0;
 
+    if (classinstances.length === 0) {
+        return <p>Nothing.</p>
+    }
+
     for (const classinst_id in schedule) {
 
-        const newClass = classinstances[classinst_id];
+        const newClass = classinstances[Number(classinst_id)];
 
         tableData.push(
         <tr key={classinst_id}>
-            <td>{newClass.date}</td>
+            <td>{newClass?.date}</td>
             {/* <td>${melonCost.toFixed(2)}</td> */}
             <td>
                     <button

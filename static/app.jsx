@@ -6,9 +6,11 @@ function App() {
     const [email, setEmail] = React.useState("");
     const [password, setPassword] = React.useState("");
     const [loggedIn, setLoggedIn] = React.useState(false);
+    
 
     // Fetch all class instances from rest API
     React.useEffect(() => {
+      console.log("iFetchedClasses");
       fetch("/api/classinstances")
         .then((response) => response.json())
         .then((classData) => {
@@ -43,6 +45,7 @@ function App() {
 
         if(checkUser.status===200){
             setLoggedIn(true);
+            localStorage.setItem("isLoggedIn", true);
         } else if (checkUser.status===401){
             alert(checkUser.statusText);
         }
@@ -56,12 +59,18 @@ function App() {
         setPassword("");
     };
 
+    React.useEffect(() => {
+        const isLoggedIn = localStorage.getItem('isLoggedIn');
+        setLoggedIn(!!isLoggedIn);
+    }, []);
+
 
     // Save schedule sessions
     React.useEffect(() => {
         const previousSchedule = localStorage.getItem('schedule');
         if (previousSchedule) {
         setSchedule(JSON.parse(previousSchedule));
+        console.log(previousSchedule);
         }
     }, []);
 
@@ -69,7 +78,7 @@ function App() {
     React.useEffect(() => {
         localStorage.setItem('schedule', JSON.stringify(schedule));
     }, [schedule]);
-
+    
 
     // Add to / Remove from schedule
     function addClassToSchedule(classId) {
@@ -93,13 +102,15 @@ function App() {
     function removeClassFromSchedule(classId) {
 
         setSchedule((currentSchedule) => {
-  
+
             const newSchedule = { ...currentSchedule };
 
-            newSchedule[classId] = 0;
+            delete newSchedule.classId;
 
             return newSchedule;
+
         });
+
     }
     
     
@@ -132,11 +143,10 @@ function App() {
           </ReactRouterDOM.Route>
 
           <ReactRouterDOM.Route exact path="/schedule">
-          {loggedIn ? 
             <Schedule schedule={schedule} 
                 classinstances={classinstances} 
-                removeClassFromSchedule={removeClassFromSchedule} />:
-            <ReactRouterDOM.Redirect to='/' />}
+                removeClassFromSchedule={removeClassFromSchedule} />
+            {/* // <ReactRouterDOM.Redirect to='/' /> */}
           </ReactRouterDOM.Route>
 
         </div>
