@@ -2,7 +2,7 @@
 
 from flask import (Flask, render_template, request, flash, session,
                    redirect, jsonify)
-from model import ClassInstance, User, connect_to_db, db
+from model import User, connect_to_db, db
 import crud
 
 app = Flask(__name__)
@@ -37,7 +37,10 @@ def login():
             session['user'] = user.user_id
             return jsonify({
                 "id": user.user_id,
-                "email": user.email
+                "fname": user.fname,
+                "lname": user.lname,
+                "email": user.email,
+                "password": user.password
             })
 
         else:
@@ -70,20 +73,43 @@ def create_account():
                 "id": user.user_id,
                 "email": user.email
             })
-
-    return redirect("/")
-
     
 
 @app.route('/api/classinstances')
 def get_class_instances():
-    classinstances = ClassInstance.query.all()
+    classinstances = crud.get_classinstances()
     return jsonify({classinstance.classinst_id: classinstance.to_dict() for classinstance in classinstances})
 
-@app.route('/api/users')
-def get_users():
-    users = User.query.all()
-    return jsonify({user.user_id: user.to_dict() for user in users})
+# @app.route('/api/users')
+# def get_users():
+#     users = User.query.all()
+#     return jsonify({user.user_id: user.to_dict() for user in users})
+
+@app.route('/<user_id>', methods= ['POST'])
+def add_class_to_schedule(user_id):
+    """Create userclass instance"""
+
+    user_id = user_id
+    class_id = request.json.get('class_id')
+
+    if crud.check_classinstance(user_id, class_id):
+        return "", "401 You've already added this class."
+    else:
+        userclass = crud.create_userclass(user_id, class_id)
+        db.session.add(userclass)
+        db.session.commit()
+        return redirect("/")
+
+
+@app.route('/api/<user_id>')
+def get_schedule_by_user_id(user_id):
+    """View schedule by user id"""
+
+    userclasses = crud.get_classinstances_by_user_id(user_id)
+
+    return jsonify(userclasses)
+
+
 
 
 if __name__ == "__main__":

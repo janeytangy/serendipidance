@@ -148,7 +148,19 @@ class UserClass(db.Model):
     class_instance = db.relationship("ClassInstance", back_populates="userclass")
 
     def __repr__(self):
-        return f'<UserClass userclass_id={self.userclass_id} class_id={self.class_id} paid={self.paid}>'
+        return f'<UserClass userclass_id={self.userclass_id} class_id={self.classinst_id} paid={self.paid}>'
+
+    def to_dict(self):
+        return {'userclass_id': self.userclass_id,
+                'classinst_id': self.classinst_id,
+                'date': self.class_instance.date,
+                'start_time': self.class_instance.start_time,
+                'end_time': self.class_instance.end_time,
+                'price': self.class_instance.price,
+                'style': self.class_instance.style,
+                'level': self.class_instance.level,
+                'instructor': self.class_instance.instructor,
+                'studio': self.class_instance.studio}
 
 
 

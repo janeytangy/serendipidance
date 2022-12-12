@@ -62,11 +62,11 @@ def create_classinstance(date, start_time, end_time, price, style, level, instru
         price=price,
         style=style,
         level=level,
-        instructor=instructor, # remove these after implementing
-        studio=studio           # usertype conditions
+        instructor=instructor, 
+        studio=studio           
     )
 
-def get_classinstance():
+def get_classinstances():
     """Returns all class instances"""
 
     return ClassInstance.query.all()
@@ -89,14 +89,26 @@ def create_usertype(type_name):
 
 def create_userclass(user_id, classinst_id):
     """Create userclass"""
-
     return UserClass(user_id=user_id, classinst_id=classinst_id)
 
+def get_classinstances_by_user_id(user_id):
+    """Return all class instances of a user id"""
 
+    userclasses = UserClass.query.filter(UserClass.user_id==user_id).all()
+
+    return {userclass.userclass_id: userclass.to_dict() for userclass in userclasses}
+
+def check_classinstance(user_id, class_id):
+    """Checks if user already added a class"""
+
+    userclass = UserClass.query.filter(UserClass.user_id==user_id, UserClass.classinst_id==class_id).all()
+
+    if len(userclass) > 0:
+        return True
+    else:
+        return False
+        
 
 if __name__ == '__main__':
-    # from server import app
-
-    # remove once server.py is
-    app = Flask(__name__)
+    from server import app
     connect_to_db(app)

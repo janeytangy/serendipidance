@@ -1,16 +1,18 @@
 function App() {
-    const [classinstances, setClass] = React.useState({});
+    let [classinstances, setClass] = React.useState({});
     // const [users, setUsers] = React.useState({});
-    const [schedule, setSchedule] = React.useState({});
+    let [schedule, setSchedule] = React.useState({});
 
-    const [email, setEmail] = React.useState("");
-    const [password, setPassword] = React.useState("");
-    const [loggedIn, setLoggedIn] = React.useState(false);
-    
+    let [user, setUser] = React.useState({id:"",
+                                            fname:"",
+                                            lname:"",
+                                            email:"",
+                                            password:""});
+    let [loggedIn, setLoggedIn] = React.useState(false);
+
 
     // Fetch all class instances from rest API
     React.useEffect(() => {
-      console.log("iFetchedClasses");
       fetch("/api/classinstances")
         .then((response) => response.json())
         .then((classData) => {
@@ -38,14 +40,35 @@ function App() {
                 'Content-Type': 'application/json'
               },
             body: JSON.stringify({
-                email: email,
-                password: password,
+                email: user.email,
+                password: user.password
             }),
         });
 
         if(checkUser.status===200){
+            
+            let userData = await fetch("/login", {
+                method: "POST",
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                  },
+                body: JSON.stringify({
+                    email: user.email,
+                    password: user.password
+                }),
+            })
+            .then((response) => response.json())
+            .then((result) => setUser({id: result.id,
+                                        fname: result.fname,
+                                        lname: result.lname,
+                                        email: result.email,
+                                        password: result.password
+            }));
+
             setLoggedIn(true);
             localStorage.setItem("isLoggedIn", true);
+
         } else if (checkUser.status===401){
             alert(checkUser.statusText);
         }
@@ -55,48 +78,69 @@ function App() {
     let handleLogOut = (evt) => {
         evt.preventDefault();
         setLoggedIn(false);
-        setEmail("");
-        setPassword("");
+        // localStorage.clear();
+        localStorage.setItem("isLoggedIn", false);
+        setUser({id: "",
+                fname:"",
+                lname:"",
+                email:"",
+                password:""});
     };
 
     React.useEffect(() => {
         const isLoggedIn = localStorage.getItem('isLoggedIn');
-        setLoggedIn(!!isLoggedIn);
+        setLoggedIn(isLoggedIn);
     }, []);
 
 
     // Save schedule sessions
-    React.useEffect(() => {
-        const previousSchedule = localStorage.getItem('schedule');
-        if (previousSchedule) {
-        setSchedule(JSON.parse(previousSchedule));
-        console.log(previousSchedule);
-        }
-    }, []);
+    // React.useEffect(() => {
+    //     const previousSchedule = localStorage.getItem('schedule');
+    //     if (previousSchedule) {
+    //     setSchedule(JSON.parse(previousSchedule));
+    //     }
+    // }, []);
 
     
-    React.useEffect(() => {
-        localStorage.setItem('schedule', JSON.stringify(schedule));
-    }, [schedule]);
-    
+    // React.useEffect(() => {
+    //     localStorage.setItem('schedule', JSON.stringify(schedule));
+    // }, [schedule]);
+
 
     // Add to / Remove from schedule
+
     function addClassToSchedule(classId) {
 
-        setSchedule((currentSchedule) => {
+        // setSchedule((currentSchedule) => {
   
-            const newSchedule = { ...currentSchedule };
+        //     const newSchedule = { ...currentSchedule };
 
-            if (newSchedule[classId]) {
-                alert("You have already added this class to your schedule.")
-            // } else if (newSchedule[classId].start_time) {
+        //     if (newSchedule[classId]) {
+        //         alert("You have already added this class to your schedule.")
+        //     // } else if (newSchedule[classId].start_time) {
                 
-            } else {
-                newSchedule[classId] = 1;
-            }
+        //     } else {
+        //         newSchedule[classId] = 1;
+        //     }
 
-            return newSchedule;
+        //     return newSchedule;
+        // });
+
+        let addClass = fetch(`/${user.id}`, {
+            method: "POST",
+            headers: {                
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+              },
+            body: JSON.stringify({
+                user_id: user.id,
+                class_id: classId
+            }),
         });
+
+        if (addClass.status===401){
+            alert(addClass.statusText);
+        }
     }
 
     function removeClassFromSchedule(classId) {
@@ -112,7 +156,15 @@ function App() {
         });
 
     }
-    
+
+    React.useEffect(() => {
+        fetch(`/api/${user.id}`)
+            .then((response) => response.json())
+            .then((result) => {
+                setSchedule(result);
+            });
+        }, []);
+        
     
   
     return (
@@ -134,8 +186,8 @@ function App() {
           <ReactRouterDOM.Route exact path="/login">
           {loggedIn ? <ReactRouterDOM.Redirect to='/schedule' />:
             <Login handleLogin={handleLogin}
-            setEmail={(evt) => setEmail(evt.target.value)}
-            setPassword={(evt) => setPassword(evt.target.value)} />}
+            setEmail={(evt) => setUser({ ...user, email: evt.target.value })}
+            setPassword={(evt) => setUser({ ...user, password: evt.target.value })} />}
           </ReactRouterDOM.Route>
 
           <ReactRouterDOM.Route exact path="/create">
@@ -143,10 +195,10 @@ function App() {
           </ReactRouterDOM.Route>
 
           <ReactRouterDOM.Route exact path="/schedule">
-            <Schedule schedule={schedule} 
+          {loggedIn ? <Schedule schedule={schedule} 
                 classinstances={classinstances} 
-                removeClassFromSchedule={removeClassFromSchedule} />
-            {/* // <ReactRouterDOM.Redirect to='/' /> */}
+                removeClassFromSchedule={removeClassFromSchedule} />:
+            <ReactRouterDOM.Redirect to='/' />}
           </ReactRouterDOM.Route>
 
         </div>

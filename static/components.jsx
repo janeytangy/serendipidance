@@ -4,6 +4,7 @@
 function ClassRow(props) {
     const { id, date, start_time, end_time, price, style, level, instructor, studio, handleAddClass, loggedIn } = props;
 
+
     if (loggedIn) {
         return (
             <React.Fragment>
@@ -12,7 +13,7 @@ function ClassRow(props) {
                         <span className="date">{date}</span>
                     </td>
                     <td>
-                        <span className="start time">{start_time}</span>
+                        <span className="start time">{new Date(start_time).toLocaleTimeString("hh")}</span>
                     </td>
                     <td>
                         <span className="end time">{new Date(end_time).getHours()}:{new Date(end_time).getMinutes(2)}</span>
@@ -199,10 +200,6 @@ function Schedule(props) {
     const { schedule, classinstances, removeClassFromSchedule } = props;
     const tableData = [];
     // let totalCost = 0;
-
-    if (classinstances.length === 0) {
-        return <p>Nothing.</p>
-    }
 
     for (const classinst_id in schedule) {
 
