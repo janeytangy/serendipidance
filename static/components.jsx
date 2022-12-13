@@ -197,9 +197,17 @@ function AllClasses(props) {
 
 
 function Schedule(props) {
-    const { schedule, classinstances, removeClassFromSchedule } = props;
+    const { user, schedule, setSchedule, classinstances, removeClassFromSchedule } = props;
     const tableData = [];
     // let totalCost = 0;
+
+    React.useEffect(() => {
+        fetch(`/api/${user.id}`)
+            .then((response) => response.json())
+            .then((result) => {
+                setSchedule(result);
+            });
+    }, []);
 
     for (const classinst_id in schedule) {
 

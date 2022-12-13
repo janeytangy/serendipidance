@@ -111,21 +111,6 @@ function App() {
 
     function addClassToSchedule(classId) {
 
-        // setSchedule((currentSchedule) => {
-  
-        //     const newSchedule = { ...currentSchedule };
-
-        //     if (newSchedule[classId]) {
-        //         alert("You have already added this class to your schedule.")
-        //     // } else if (newSchedule[classId].start_time) {
-                
-        //     } else {
-        //         newSchedule[classId] = 1;
-        //     }
-
-        //     return newSchedule;
-        // });
-
         let addClass = fetch(`/${user.id}`, {
             method: "POST",
             headers: {                
@@ -143,28 +128,28 @@ function App() {
         }
     }
 
+
     function removeClassFromSchedule(classId) {
 
         setSchedule((currentSchedule) => {
-
             const newSchedule = { ...currentSchedule };
-
             delete newSchedule.classId;
-
             return newSchedule;
-
         });
-
     }
-
-    React.useEffect(() => {
-        fetch(`/api/${user.id}`)
-            .then((response) => response.json())
-            .then((result) => {
-                setSchedule(result);
-            });
-        }, []);
-        
+   
+    
+    // React.useEffect(() => {
+    //     getSchedule()
+    // }, []);
+    
+    // function getSchedule() {
+    //     fetch(`/api/${user.id}`)
+    //         .then((response) => response.json())
+    //         .then((result) => {
+    //             setSchedule(result);
+    //         });
+    // }
     
   
     return (
@@ -195,7 +180,9 @@ function App() {
           </ReactRouterDOM.Route>
 
           <ReactRouterDOM.Route exact path="/schedule">
-          {loggedIn ? <Schedule schedule={schedule} 
+          {loggedIn ? <Schedule user={user}
+                schedule={schedule}
+                setSchedule={setSchedule}
                 classinstances={classinstances} 
                 removeClassFromSchedule={removeClassFromSchedule} />:
             <ReactRouterDOM.Redirect to='/' />}
