@@ -128,29 +128,20 @@ function App() {
         }
     }
 
-
     function removeClassFromSchedule(classId) {
-
-        setSchedule((currentSchedule) => {
-            const newSchedule = { ...currentSchedule };
-            delete newSchedule.classId;
-            return newSchedule;
+        fetch(`/${user.id}/${classId}`, {
+            method: "POST",
+            headers: {                
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+              },
+            body: JSON.stringify({
+                user_id: user.id,
+                class_id: classId
+            }),
         });
     }
-   
-    
-    // React.useEffect(() => {
-    //     getSchedule()
-    // }, []);
-    
-    // function getSchedule() {
-    //     fetch(`/api/${user.id}`)
-    //         .then((response) => response.json())
-    //         .then((result) => {
-    //             setSchedule(result);
-    //         });
-    // }
-    
+
   
     return (
       <ReactRouterDOM.BrowserRouter>

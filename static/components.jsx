@@ -223,7 +223,7 @@ function Schedule(props) {
                         className="btn btn-sm btn-success d-inline-block"
                         onClick={() => removeClassFromSchedule(classinst_id)}
                     >
-                        Remove from Schedule
+                        Remove
                     </button>
                 </td>
         </tr>,

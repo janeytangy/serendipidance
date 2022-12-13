@@ -109,6 +109,17 @@ def get_schedule_by_user_id(user_id):
 
     return jsonify(userclasses)
 
+@app.route('/<user_id>/<class_id>', methods= ['POST'])
+def remove_class(user_id, class_id):
+    """Remove class for user"""
+
+    userclass = crud.get_userclass(user_id, class_id)
+
+    db.session.delete(userclass)
+    db.session.commit()
+
+    return redirect("/")
+
 
 
 
