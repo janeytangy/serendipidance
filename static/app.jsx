@@ -3,13 +3,15 @@ function App() {
     // const [users, setUsers] = React.useState({});
     let [schedule, setSchedule] = React.useState({});
 
-    let [user, setUser] = React.useState({id:"",
-                                            fname:"",
-                                            lname:"",
-                                            email:"",
-                                            password:""});
-    let [loggedIn, setLoggedIn] = React.useState(false);
-    localStorage.clear();
+    let [user, setUser] = React.useState({id: Number(localStorage.getItem("userId")),
+                                            fname: localStorage.getItem("userFName"),
+                                            lname: localStorage.getItem("userLName"),
+                                            email: localStorage.getItem("userEmail"),
+                                            password: localStorage.getItem("userPassword")});
+
+    let [loggedIn, setLoggedIn] = React.useState(JSON.parse(localStorage.getItem("isLoggedIn")));
+    // localStorage.clear();
+    
 
 
     // Fetch all class instances from rest API
@@ -66,7 +68,6 @@ function App() {
                                         email: result.email,
                                         password: result.password
             }));
-
             setLoggedIn(true);
             localStorage.setItem("isLoggedIn", true);
 
@@ -74,6 +75,16 @@ function App() {
             alert(checkUser.statusText);
         }
     };
+
+    function setSession() {
+        localStorage.setItem("userId", user.id);
+        localStorage.setItem("userFName", user.fname);
+        localStorage.setItem("userLName", user.lname);
+        localStorage.setItem("userEmail", user.email);
+        localStorage.setItem("userPassword", user.password);
+    }
+
+    Promise.all([handleLogin, setSession()]);
 
 
     let handleLogOut = async (evt) => {
@@ -99,8 +110,12 @@ function App() {
     };
 
     React.useEffect(() => {
-        const isLoggedIn = localStorage.getItem('isLoggedIn');
-        setLoggedIn(isLoggedIn);
+        const isLoggedIn = localStorage.getItem("isLoggedIn");
+        if (isLoggedIn === 'true') {
+            setLoggedIn(true);
+        } else {
+            setLoggedIn(false);
+        }
     }, []);
 
 
