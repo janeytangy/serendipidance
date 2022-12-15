@@ -31,7 +31,6 @@ def login():
 
     user = crud.get_user_by_email(email)
 
-
     if user:
         if user.password == password:
             session['user'] = user.user_id
@@ -50,6 +49,13 @@ def login():
         return "", "401 Incorrect username & password."
 
 
+@app.route("/logout", methods=['POST'])
+def logout():
+    """Logout"""
+    
+    session.pop('user', None)
+
+    return redirect("/")
     
 
 @app.route("/create", methods=['POST'])

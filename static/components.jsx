@@ -201,12 +201,20 @@ function Schedule(props) {
     const tableData = [];
     // let totalCost = 0;
 
-    React.useEffect(() => {
+    const onClick = (classinst_id) => {
+        removeClassFromSchedule(classinst_id);
+        fetchSchedule();
+    }
+    const fetchSchedule = () => {
         fetch(`/api/${user.id}`)
-            .then((response) => response.json())
-            .then((result) => {
-                setSchedule(result);
-            });
+        .then((response) => response.json())
+        .then((result) => {
+        setSchedule(result);
+        });
+    }
+
+    React.useEffect(() => {
+        fetchSchedule();
     }, []);
 
     for (const classinst_id in schedule) {
@@ -221,7 +229,7 @@ function Schedule(props) {
                     <button
                         type="button"
                         className="btn btn-sm btn-success d-inline-block"
-                        onClick={() => removeClassFromSchedule(classinst_id)}
+                        onClick={() => onClick(classinst_id)}
                     >
                         Remove
                     </button>
@@ -421,10 +429,12 @@ function CreateAccount(props) {
         });
 
         if(newUser.status===200){
-            location.reload();
             alert("Congratulations, your account has been created and you can now login!");
+            location.reload();
+
         } else if (newUser.status===401) {
             alert("Sorry, that email is already being used. Please try again with a different email.");
+            location.reload();
         }
     };
 

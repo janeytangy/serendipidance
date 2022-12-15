@@ -96,7 +96,7 @@ def get_classinstances_by_user_id(user_id):
 
     userclasses = UserClass.query.filter(UserClass.user_id==user_id).all()
 
-    return {userclass.userclass_id: userclass.to_dict() for userclass in userclasses}
+    return {userclass.classinst_id: userclass.to_dict() for userclass in userclasses}
 
 def check_classinstance(user_id, class_id):
     """Checks if user already added a class"""

@@ -9,6 +9,7 @@ function App() {
                                             email:"",
                                             password:""});
     let [loggedIn, setLoggedIn] = React.useState(false);
+    localStorage.clear();
 
 
     // Fetch all class instances from rest API
@@ -75,36 +76,32 @@ function App() {
     };
 
 
-    let handleLogOut = (evt) => {
+    let handleLogOut = async (evt) => {
         evt.preventDefault();
         setLoggedIn(false);
-        // localStorage.clear();
         localStorage.setItem("isLoggedIn", false);
         setUser({id: "",
                 fname:"",
                 lname:"",
                 email:"",
                 password:""});
+        
+        let removeUser = await fetch("/logout", {
+            method: "POST",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+                },
+            body: JSON.stringify({
+                email: user.email
+            }),
+        });
     };
 
     React.useEffect(() => {
         const isLoggedIn = localStorage.getItem('isLoggedIn');
         setLoggedIn(isLoggedIn);
     }, []);
-
-
-    // Save schedule sessions
-    // React.useEffect(() => {
-    //     const previousSchedule = localStorage.getItem('schedule');
-    //     if (previousSchedule) {
-    //     setSchedule(JSON.parse(previousSchedule));
-    //     }
-    // }, []);
-
-    
-    // React.useEffect(() => {
-    //     localStorage.setItem('schedule', JSON.stringify(schedule));
-    // }, [schedule]);
 
 
     // Add to / Remove from schedule
@@ -171,7 +168,13 @@ function App() {
           </ReactRouterDOM.Route>
 
           <ReactRouterDOM.Route exact path="/schedule">
-          {loggedIn ? <Schedule user={user}
+          {/* {loggedIn ? <Schedule user={user}
+                schedule={schedule}
+                setSchedule={setSchedule}
+                classinstances={classinstances} 
+                removeClassFromSchedule={removeClassFromSchedule} />:
+            <ReactRouterDOM.Redirect to='/' />} */}
+            {loggedIn ? <Schedule user={user}
                 schedule={schedule}
                 setSchedule={setSchedule}
                 classinstances={classinstances} 

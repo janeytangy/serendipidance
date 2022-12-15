@@ -151,8 +151,7 @@ class UserClass(db.Model):
         return f'<UserClass userclass_id={self.userclass_id} class_id={self.classinst_id} paid={self.paid}>'
 
     def to_dict(self):
-        return {'userclass_id': self.userclass_id,
-                'classinst_id': self.classinst_id,
+        return {'classinst_id': self.classinst_id,
                 'date': self.class_instance.date,
                 'start_time': self.class_instance.start_time,
                 'end_time': self.class_instance.end_time,
