@@ -1,16 +1,16 @@
 function App() {
-    let [classinstances, setClass] = React.useState({});
+    const [classinstances, setClass] = React.useState({});
     // const [users, setUsers] = React.useState({});
-    let [schedule, setSchedule] = React.useState({});
+    const [schedule, setSchedule] = React.useState({});
 
-    let [user, setUser] = React.useState({id: Number(localStorage.getItem("userId")),
+    const [user, setUser] = React.useState({id: Number(localStorage.getItem("userId")),
                                             fname: localStorage.getItem("userFName"),
                                             lname: localStorage.getItem("userLName"),
                                             email: localStorage.getItem("userEmail"),
-                                            password: localStorage.getItem("userPassword")});
+                                            password: localStorage.getItem("userPassword"),
+                                            usertype: localStorage.getItem("userType")});
 
-    let [loggedIn, setLoggedIn] = React.useState(JSON.parse(localStorage.getItem("isLoggedIn")));
-    // localStorage.clear();
+    const [loggedIn, setLoggedIn] = React.useState(JSON.parse(localStorage.getItem("isLoggedIn")));
     
 
 
@@ -66,7 +66,8 @@ function App() {
                                         fname: result.fname,
                                         lname: result.lname,
                                         email: result.email,
-                                        password: result.password
+                                        password: result.password,
+                                        usertype: result.usertype
             }));
             setLoggedIn(true);
             localStorage.setItem("isLoggedIn", true);
@@ -82,6 +83,7 @@ function App() {
         localStorage.setItem("userLName", user.lname);
         localStorage.setItem("userEmail", user.email);
         localStorage.setItem("userPassword", user.password);
+        localStorage.setItem("userType", user.usertype);
     }
 
     Promise.all([handleLogin, setSession()]);
@@ -95,7 +97,8 @@ function App() {
                 fname:"",
                 lname:"",
                 email:"",
-                password:""});
+                password:"",
+                usertype:""});
         
         let removeUser = await fetch("/logout", {
             method: "POST",
@@ -183,12 +186,6 @@ function App() {
           </ReactRouterDOM.Route>
 
           <ReactRouterDOM.Route exact path="/schedule">
-          {/* {loggedIn ? <Schedule user={user}
-                schedule={schedule}
-                setSchedule={setSchedule}
-                classinstances={classinstances} 
-                removeClassFromSchedule={removeClassFromSchedule} />:
-            <ReactRouterDOM.Redirect to='/' />} */}
             {loggedIn ? <Schedule user={user}
                 schedule={schedule}
                 setSchedule={setSchedule}

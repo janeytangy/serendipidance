@@ -1,6 +1,4 @@
 
-
-
 function ClassRow(props) {
     const { id, date, start_time, end_time, price, style, level, instructor, studio, handleAddClass, loggedIn } = props;
 
@@ -102,8 +100,29 @@ function AllClasses(props) {
       );
         
       classRows.push(classRow);
+
     }
+
+    // const [sortedField, setSortedField] = React.useState(null);
+
+    // const [sortConfig, setSortConfig] = React.useState(null);
   
+    // React.useMemo(() => {
+    //     let sortedClasses = [...classRows];
+    //     if (sortedField !== null) {
+    //     sortedClasses.sort((a, b) => {
+    //         if (a[sortConfig.key] < b[sortConfig.key]) {
+    //         return sortConfig.direction === 'ascending' ? -1 : 1;
+    //         }
+    //         if (a[sortConfig.key] > b[sortConfig.key]) {
+    //         return sortConfig.direction === 'ascending' ? 1 : -1;
+    //         }
+    //         return 0;
+    //     });
+    //     }
+    //     return sortedClasses;
+    // }, [classRows, sortConfig]);
+
     return (
       <React.Fragment key={classinstances.id}>
         <h2>Upcoming Classes</h2>
@@ -112,7 +131,11 @@ function AllClasses(props) {
                 <table className="class">
                     <thead>
                         <tr>
-                            <th>Date</th>
+                            <th>
+                                <button type="button" onClick={() => setSortedField('date')}>
+                                Date
+                                </button>
+                            </th>
                             <th>Start Time</th>
                             <th>End Time</th>
                             <th>Price</th>
@@ -123,7 +146,9 @@ function AllClasses(props) {
                         </tr>
                     </thead>
                     <tbody>
-                        {classRows}
+                    {classRows.map(classRows => (
+                        classRows
+                    ))}
                     </tbody>
                 </table>
             </div>
@@ -132,6 +157,61 @@ function AllClasses(props) {
     );
   }
 
+// function Table(props) {
+
+//     const { classinstances, addClassToSchedule, loggedIn } = props;
+
+//     const [tableData, setTableData] = React.useState(Object.values(classinstances));
+   
+//     const columns = [
+//      { label: "Date", accessor: "date" },
+//      { label: "Start Time", accessor: "start_time" },
+//      { label: "End Time", accessor: "end_time" },
+//      { label: "Price", accessor: "price" },
+//      { label: "Style", accessor: "style" },
+//      { label: "Level", accessor: "level" },
+//      { label: "Instructor", accessor: "instructor" },
+//      { label: "Studio", accessor: "studio" },
+//     ];
+   
+//     return (
+//      <>
+//       <table className="table">
+//        <TableHead columns={columns} />
+//        <TableBody columns={columns} tableData={tableData} />
+//       </table>
+//      </>
+//     );
+//    };
+
+// const TableHead = ({ columns }) => {
+//     return (
+//      <thead>
+//       <tr>
+//        {columns.map(({ label, accessor }) => {
+//         return <th key={accessor}>{label}</th>;
+//        })}
+//       </tr>
+//      </thead>
+//     );
+//    };
+
+// const TableBody = ({ tableData, columns }) => {
+//     return (
+//      <tbody>
+//       {tableData.map((data) => {
+//        return (
+//         <tr key={data.id}>
+//          {columns.map(({ accessor }) => {
+//           const tData = data[accessor] ? data[accessor] : "——";
+//           return <td key={accessor}>{tData}</td>;
+//          })}
+//         </tr>
+//        );
+//       })}
+//      </tbody>
+//     );
+//    };
 
 //   function AllUsers(props) {
 //     const { users, setUsers } = props;
@@ -238,22 +318,42 @@ function Schedule(props) {
         );
     }
 
-    return (
-        <React.Fragment>
-        <h1>My Schedule</h1>
-        <div className="col-6">
-            <table className="table">
-            <thead>
-                <tr>
-                <th>Date</th>
-                </tr>
-            </thead>
-            <tbody>{tableData}</tbody>
-            </table>
-            {/* <p className="lead">Total: ${totalCost.toFixed(2)}</p> */}
-        </div>
-        </React.Fragment>
-    );
+    if (user.usertype === "student"){
+        return (
+            <React.Fragment>
+            <h1>My Schedule</h1>
+            <div className="col-6">
+                <table className="table">
+                <thead>
+                    <tr>
+                    <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>{tableData}</tbody>
+                </table>
+                {/* <p className="lead">Total: ${totalCost.toFixed(2)}</p> */}
+            </div>
+            </React.Fragment>
+        );
+    } else {
+        return (
+            <React.Fragment>
+            <h1>Our Schedule</h1>
+            <div className="col-6">
+                <table className="table">
+                <thead>
+                    <tr>
+                    <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>Forms for Creating Classes</tbody>
+                </table>
+            </div>
+            </React.Fragment>
+        );
+    }
+
+    
 }
 
 
@@ -403,6 +503,7 @@ function Login({handleLogin, setEmail, setPassword}) {
 function CreateAccount(props) {
     const [fname, setFName] = React.useState("");
     const [lname, setLName] = React.useState("");
+    const [usertype, setUsertype] = React.useState("");
     const [email, setEmail] = React.useState("");
     const [password, setPassword] = React.useState("");
 
@@ -410,6 +511,8 @@ function CreateAccount(props) {
         password: "",
         showPassword: false,
       });
+
+    const options = ["Choose below", "student", "studio"];
 
     let handleSubmit = async (evt) => {
         evt.preventDefault();
@@ -423,6 +526,7 @@ function CreateAccount(props) {
             body: JSON.stringify({
                 fname: fname,
                 lname: lname,
+                usertype: usertype,
                 email: email,
                 password: password,
             }),
@@ -435,6 +539,9 @@ function CreateAccount(props) {
         } else if (newUser.status===401) {
             alert("Sorry, that email is already being used. Please try again with a different email.");
             location.reload();
+
+        } else if (newUser.status===400) {
+            alert("Please complete all fields.");
         }
     };
 
@@ -454,10 +561,12 @@ function CreateAccount(props) {
             </label>
             <label>
                 Account Type:
-                <select>
-                    <option defaultValue="student">Student</option>
-                    <option value="instructor">Instructor</option>
-                    <option value="studio">Studio</option>
+                <select id="usertypes" value={usertype} onChange={(evt) => setUsertype(evt.target.value)}>
+                    {options.map((value) => (
+                    <option value={value} key={value}>
+                        {value}
+                    </option>
+                    ))}
                 </select>
             </label>
             <label>

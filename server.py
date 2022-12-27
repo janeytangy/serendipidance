@@ -39,7 +39,8 @@ def login():
                 "fname": user.fname,
                 "lname": user.lname,
                 "email": user.email,
-                "password": user.password
+                "password": user.password,
+                "usertype": user.usertype
             })
 
         else:
@@ -64,6 +65,7 @@ def create_account():
 
     fname = request.json.get('fname')
     lname = request.json.get('lname')
+    usertype = request.json.get('usertype')
     email = request.json.get('email')
     password = request.json.get('password')
 
@@ -71,8 +73,10 @@ def create_account():
 
     if user:
         return jsonify({'error': 'Sorry, that email is already being used. Please try again with a different email.' }), 401
+    elif usertype =="" or fname=="" or lname=="" or email=="" or password=="":
+        return jsonify({'error': 'Please complete all fields.'}), 400
     else:
-        user = crud.create_user(fname, lname, email, password)
+        user = crud.create_user(fname, lname, email, password, usertype)
         db.session.add(user)
         db.session.commit()
         return jsonify({
@@ -84,6 +88,7 @@ def create_account():
 @app.route('/api/classinstances')
 def get_class_instances():
     classinstances = crud.get_classinstances()
+
     return jsonify({classinstance.classinst_id: classinstance.to_dict() for classinstance in classinstances})
 
 # @app.route('/api/users')

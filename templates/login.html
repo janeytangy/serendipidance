@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block title %}Bay Area Dance{% endblock %}
+
+{% block body %}
+<h1>Let's Dance, Baddies!</h1>
+
+<h2>Log In</h2>
+<form action="/login" method="POST">
+  <p>
+    Email <input type="text" name="email">
+  </p>
+
+  <p>
+    Password <input type="password" name="password">
+  </p>
+
+  <p>
+    <input type="submit">
+  </p>
+</form>
+
+<h2>Create an Account</h2>
+<form action="/login" method="POST">
+  <p>
+    Email <input type="text" name="email">
+  </p>
+
+  <p>
+    Password <input type="password" name="password">
+  </p>
+
+  <p>
+    <label for="usertype">Account Type</label>
+
+    <select name="usertype" id="usertype">
+      <option value="student">Student</option>
+      <option value="instructor">Instructor</option>
+      <option value="studio">Studio</option>
+    </select>
+  </p>
+
+  <p>
+    <input type="submit">
+  </p>
+</form>
+
+{% endblock %}

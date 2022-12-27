@@ -18,21 +18,19 @@ class User(db.Model):
     lname = db.Column(db.String, nullable=False)
     email = db.Column(db.String, nullable=False, unique=True)
     password = db.Column(db.String, nullable=False)
-    usertype_id = db.Column(db.Integer, db.ForeignKey("usertype.usertype_id"))
+    usertype = db.Column(db.String, nullable=False)
 
     # ONLY FOR STUDIO TYPE USER
     address = db.Column(db.String, nullable=True)
     website = db.Column(db.String, nullable=True)
-
-    # ONLY FOR INSTRUCTOR TYPE USER
     instagram = db.Column(db.String, nullable=True, unique=True)
 
     userclass = db.relationship("UserClass", back_populates="user")
-    usertype = db.relationship("UserType", back_populates="user")
+    # usertype = db.relationship("UserType", back_populates="user")
     class_event = db.relationship("ClassEvent", back_populates="user")
 
     def __repr__(self):
-        return f'<User user_id={self.user_id} fname={self.fname} lname={self.lname} email={self.email}>'
+        return f'<User user_id={self.user_id} fname={self.fname} lname={self.lname} email={self.email} usertype={self.usertype}>'
     
     def to_dict(self):
         return {'user_id': self.user_id,
@@ -86,8 +84,6 @@ class ClassInstance(db.Model):
     price = db.Column(db.Integer, nullable=False)
     style = db.Column(db.String, nullable=False)
     level = db.Column(db.String, nullable=False)
-
-    # remove after implementing usertype conditions
     instructor =  db.Column(db.String, nullable=False)
     studio =  db.Column(db.String, nullable=False)
 
@@ -113,24 +109,24 @@ class ClassInstance(db.Model):
 
 
 
-class UserTypeChoices(Enum):
-    STUDENT = 'Student'
-    INSTRUCTOR = 'Instructor'
-    STUDIO = 'Studio'
+# class UserTypeChoices(Enum):
+#     STUDENT = 'Student'
+#     INSTRUCTOR = 'Instructor'
+#     STUDIO = 'Studio'
     
-class UserType(db.Model):
-    """User Type"""
+# class UserType(db.Model):
+#     """User Type"""
 
-    __tablename__ = "usertype"
+#     __tablename__ = "usertype"
 
-    usertype_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    type_name = db.Column(db.Enum(UserTypeChoices,
-        values_callable=lambda x: [str(member.value) for member in UserTypeChoices]))
+#     usertype_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+#     type_name = db.Column(db.Enum(UserTypeChoices,
+#         values_callable=lambda x: [str(member.value) for member in UserTypeChoices]))
 
-    user = db.relationship("User", back_populates="usertype")
+#     user = db.relationship("User", back_populates="usertype")
 
-    def __repr__(self):
-        return f'<UserType usertype_id={self.usertype_id} type_name={self.type_name}>'
+#     def __repr__(self):
+#         return f'<UserType usertype_id={self.usertype_id} type_name={self.type_name}>'
 
 
 

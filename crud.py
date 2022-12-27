@@ -1,17 +1,17 @@
 """CRUD operations."""
 
 from model import (db,
-    User, UserType, UserClass,
+    User, UserClass,
     ClassEvent, ClassInstance, 
     connect_to_db)
 
 
 # USER-RELATED
 
-def create_user(fname, lname, email, password):
+def create_user(fname, lname, email, password, usertype):
     """Create and return a new user."""
 
-    return User(fname=fname, lname=lname, email=email, password=password)
+    return User(fname=fname, lname=lname, email=email, password=password, usertype=usertype)
 
 def get_users():
     """Returns all users"""
@@ -79,10 +79,10 @@ def get_class_instance_by_id(classinst_id):
 
 # USERTYPE-RELATED
 
-def create_usertype(type_name):
-    """Create usertypes"""
+# def create_usertype(type_name):
+#     """Create usertypes"""
 
-    return UserType(type_name=type_name)
+#     return UserType(type_name=type_name)
 
 
 # USERCLASS-RELATED
