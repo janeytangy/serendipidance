@@ -66,6 +66,8 @@ def create_account():
     fname = request.json.get('fname')
     lname = request.json.get('lname')
     usertype = request.json.get('usertype')
+    sname = request.json.get('sname')
+    website = request.json.get('website')
     email = request.json.get('email')
     password = request.json.get('password')
 
@@ -73,10 +75,8 @@ def create_account():
 
     if user:
         return jsonify({'error': 'Sorry, that email is already being used. Please try again with a different email.' }), 401
-    elif usertype =="" or fname=="" or lname=="" or email=="" or password=="":
-        return jsonify({'error': 'Please complete all fields.'}), 400
     else:
-        user = crud.create_user(fname, lname, email, password, usertype)
+        user = crud.create_user(fname, lname, email, password, usertype, sname, website)
         db.session.add(user)
         db.session.commit()
         return jsonify({

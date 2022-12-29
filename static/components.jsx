@@ -504,6 +504,8 @@ function CreateAccount(props) {
     const [fname, setFName] = React.useState("");
     const [lname, setLName] = React.useState("");
     const [usertype, setUsertype] = React.useState("");
+    const [sname, setSName] = React.useState("");
+    const [website, setWebsite] = React.useState("");
     const [email, setEmail] = React.useState("");
     const [password, setPassword] = React.useState("");
 
@@ -527,6 +529,8 @@ function CreateAccount(props) {
                 fname: fname,
                 lname: lname,
                 usertype: usertype,
+                sname: sname,
+                website: website,
                 email: email,
                 password: password,
             }),
@@ -540,8 +544,6 @@ function CreateAccount(props) {
             alert("Sorry, that email is already being used. Please try again with a different email.");
             location.reload();
 
-        } else if (newUser.status===400) {
-            alert("Please complete all fields.");
         }
     };
 
@@ -552,16 +554,8 @@ function CreateAccount(props) {
                 Create Account
             </h4>
             <label>
-                First Name:
-                <input type="text"  id="fname" name="fname" onChange={(evt) => setFName(evt.target.value)} />
-            </label>
-            <label>
-                Last Name:
-                <input type="text" id="lname" name="lname" onChange={(evt) => setLName(evt.target.value)}  />
-            </label>
-            <label>
                 Account Type:
-                <select id="usertypes" value={usertype} onChange={(evt) => setUsertype(evt.target.value)}>
+                <select id="usertypes" value={usertype} required={true} onChange={(evt) => setUsertype(evt.target.value)}>
                     {options.map((value) => (
                     <option value={value} key={value}>
                         {value}
@@ -569,13 +563,29 @@ function CreateAccount(props) {
                     ))}
                 </select>
             </label>
+            <label hidden={ usertype !== 'student' ? true : false }>
+                First Name:
+                <input type="text"  id="fname" name="fname" hidden={ usertype !== 'student' ? true : false } required={ usertype === 'student' ? true : false } onChange={(evt) => setFName(evt.target.value)} />
+            </label>
+            <label hidden={ usertype !== 'student' ? true : false }>
+                Last Name:
+                <input type="text" id="lname" name="lname" hidden={ usertype !== 'student' ? true : false } required={ usertype === 'student' ? true : false } onChange={(evt) => setLName(evt.target.value)}  />
+            </label>
+            <label hidden={ usertype !== 'studio' ? true : false }>
+                Studio Name:
+                <input type="text" id="sname" name="sname" hidden={ usertype !== 'studio' ? true : false } required={ usertype === 'studio' ? true : false } onChange={(evt) => setSName(evt.target.value)}  />
+            </label>
+            <label hidden={ usertype !== 'studio' ? true : false }>
+                Studio Website:
+                <input type="text" id="website" name="website" hidden={ usertype !== 'studio' ? true : false } required={ usertype === 'studio' ? true : false } onChange={(evt) => setWebsite(evt.target.value)}  />
+            </label>
             <label>
                 Email:
-                <input type="text" id="email" name="email" onChange={(evt) => setEmail(evt.target.value)} />
+                <input type="text" id="email" name="email" required={true} onChange={(evt) => setEmail(evt.target.value)} />
             </label>
             <label>
                 Password:
-                <input type={values.showPassword ? "text" : "password"} id="password" name="password" onChange={(evt) => setPassword(evt.target.value)} />
+                <input type={values.showPassword ? "text" : "password"} id="password" name="password" required={true} onChange={(evt) => setPassword(evt.target.value)} />
             </label>
             <input type="submit" value="Submit" />
         </form>

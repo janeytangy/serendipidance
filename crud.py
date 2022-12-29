@@ -8,15 +8,15 @@ from model import (db,
 
 # USER-RELATED
 
-def create_user(fname, lname, email, password, usertype):
+def create_user(fname, lname, email, password, usertype, sname, website):
     """Create and return a new user."""
 
-    return User(fname=fname, lname=lname, email=email, password=password, usertype=usertype)
+    return User(fname=fname, lname=lname, email=email, password=password, usertype=usertype, sname=sname, website=website)
 
-def get_users():
-    """Returns all users"""
+# def get_users():
+#     """Returns all users"""
 
-    return User.query.all()
+#     return User.query.all()
     
 def get_user_by_id(user_id):
     """Return user info by id"""

@@ -33,7 +33,6 @@ for dance in danceclass_data:
         dance["instructor"],
         dance["studio"])
 
-
     date = datetime.datetime.strptime(dance["date"], "%Y-%m-%d")
     start_time = datetime.datetime.strptime(dance["start_time"], "%H:%M")
     end_time = datetime.datetime.strptime(dance["end_time"], "%H:%M")
@@ -46,5 +45,4 @@ model.db.session.add_all(danceclass_in_db)
 model.db.session.commit()
 
 
-
-model.db.session.commit()
+# model.db.session.commit()

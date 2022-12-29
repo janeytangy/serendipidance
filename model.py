@@ -21,9 +21,10 @@ class User(db.Model):
     usertype = db.Column(db.String, nullable=False)
 
     # ONLY FOR STUDIO TYPE USER
-    address = db.Column(db.String, nullable=True)
-    website = db.Column(db.String, nullable=True)
-    instagram = db.Column(db.String, nullable=True, unique=True)
+    sname = db.Column(db.String, nullable=False)
+    # address = db.Column(db.String, nullable=False)
+    website = db.Column(db.String, nullable=False)
+    # instagram = db.Column(db.String, nullable=False)
 
     userclass = db.relationship("UserClass", back_populates="user")
     # usertype = db.relationship("UserType", back_populates="user")
@@ -38,19 +39,6 @@ class User(db.Model):
                 'lname': self.lname,
                 'email': self.email
                 }
-
-
-# class DanceStyles(Enum):
-#     KPOP = 'K-Pop'
-#     HIPHOP = 'Hip Hop'
-#     FOUNDATIONS = 'Foundations'
-
-# class DanceLevels(Enum):
-#     ALL = 'All Levels'
-#     BEGINNER = 'Beginner'
-#     INTERMEDIATE = 'Intermediate'
-#     ADVANCED = 'Advanced'
-#     MASTER = 'Master'
 
 class ClassEvent(db.Model):
     """Dance Class Event"""
