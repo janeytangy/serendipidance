@@ -19,7 +19,14 @@ function App() {
       fetch("/api/classinstances")
         .then((response) => response.json())
         .then((classData) => {
-          setClass(classData);
+          console.log(classData);
+          const classes = Object.values(classData);
+          console.log(classes);
+          classes.sort(function(a,b){
+            return new Date(a.date) - new Date(b.date)
+          });
+          console.log(classes);
+          setClass(classes);
         });
     }, []);
 

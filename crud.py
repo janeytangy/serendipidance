@@ -2,6 +2,7 @@
 
 from model import (db,
     User, UserClass,
+    # UserType,
     ClassEvent, ClassInstance, 
     connect_to_db)
 

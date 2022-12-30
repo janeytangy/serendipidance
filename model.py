@@ -18,6 +18,7 @@ class User(db.Model):
     lname = db.Column(db.String, nullable=False)
     email = db.Column(db.String, nullable=False, unique=True)
     password = db.Column(db.String, nullable=False)
+    # usertype_id = db.Column(db.Integer, db.ForeignKey("usertype.usertype_id"))
     usertype = db.Column(db.String, nullable=False)
 
     # ONLY FOR STUDIO TYPE USER
@@ -27,7 +28,7 @@ class User(db.Model):
     # instagram = db.Column(db.String, nullable=False)
 
     userclass = db.relationship("UserClass", back_populates="user")
-    # usertype = db.relationship("UserType", back_populates="user")
+    # usertype = db.relationship("UserType", back_populates="users")
     class_event = db.relationship("ClassEvent", back_populates="user")
 
     def __repr__(self):
@@ -110,8 +111,9 @@ class ClassInstance(db.Model):
 #     usertype_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
 #     type_name = db.Column(db.Enum(UserTypeChoices,
 #         values_callable=lambda x: [str(member.value) for member in UserTypeChoices]))
+#     type_name = db.Column(db.String, nullable=False)
 
-#     user = db.relationship("User", back_populates="usertype")
+#     users = db.relationship("User", back_populates="usertype")
 
 #     def __repr__(self):
 #         return f'<UserType usertype_id={self.usertype_id} type_name={self.type_name}>'

@@ -103,26 +103,6 @@ function AllClasses(props) {
 
     }
 
-    // const [sortedField, setSortedField] = React.useState(null);
-
-    // const [sortConfig, setSortConfig] = React.useState(null);
-  
-    // React.useMemo(() => {
-    //     let sortedClasses = [...classRows];
-    //     if (sortedField !== null) {
-    //     sortedClasses.sort((a, b) => {
-    //         if (a[sortConfig.key] < b[sortConfig.key]) {
-    //         return sortConfig.direction === 'ascending' ? -1 : 1;
-    //         }
-    //         if (a[sortConfig.key] > b[sortConfig.key]) {
-    //         return sortConfig.direction === 'ascending' ? 1 : -1;
-    //         }
-    //         return 0;
-    //     });
-    //     }
-    //     return sortedClasses;
-    // }, [classRows, sortConfig]);
-
     return (
       <React.Fragment key={classinstances.id}>
         <h2>Upcoming Classes</h2>
@@ -131,11 +111,7 @@ function AllClasses(props) {
                 <table className="class">
                     <thead>
                         <tr>
-                            <th>
-                                <button type="button" onClick={() => setSortedField('date')}>
-                                Date
-                                </button>
-                            </th>
+                            <th>Date</th>
                             <th>Start Time</th>
                             <th>End Time</th>
                             <th>Price</th>
@@ -146,9 +122,7 @@ function AllClasses(props) {
                         </tr>
                     </thead>
                     <tbody>
-                    {classRows.map(classRows => (
-                        classRows
-                    ))}
+                    {classRows}
                     </tbody>
                 </table>
             </div>
@@ -275,11 +249,20 @@ function AllClasses(props) {
 //   }
 
 
-
 function Schedule(props) {
     const { user, schedule, setSchedule, classinstances, removeClassFromSchedule } = props;
+    const [classtype, setClasstype] = React.useState("");
     const tableData = [];
     // let totalCost = 0;
+
+    const current = new Date();
+    const today = `${current.getFullYear()}-${current.getMonth()+1}-${current.getDate()}`
+
+    const classOptions = ["Choose below", "One-Time", "Weekly"];
+    const styleOptions = ["Choose below", "FOUNDATIONS", "HIPHOP", "KPOP"];
+    const levelOptions = ["Choose below", 
+                            "BEGINNER", "INTERMEDIATE", "ADVANCED",
+                            "MASTER", "ALL"];
 
     const onClick = (classinst_id) => {
         removeClassFromSchedule(classinst_id);
@@ -303,7 +286,7 @@ function Schedule(props) {
 
         tableData.push(
         <tr key={classinst_id}>
-            <td>{newClass?.date}</td>
+            <td>{newClass.date}</td>
             {/* <td>${melonCost.toFixed(2)}</td> */}
             <td>
                     <button
@@ -335,19 +318,110 @@ function Schedule(props) {
             </div>
             </React.Fragment>
         );
-    } else {
+    } else if (user.usertype === "studio") {
         return (
             <React.Fragment>
             <h1>Our Schedule</h1>
-            <div className="col-6">
+            <div>
                 <table className="table">
                 <thead>
                     <tr>
                     <th>Date</th>
                     </tr>
                 </thead>
-                <tbody>Forms for Creating Classes</tbody>
+                <tbody>
+                    <p>Display classes after adding</p>
+                </tbody>
                 </table>
+            </div>
+            <div>
+                <label>
+                    Please select the type of class you'd like to submit:
+                    <select 
+                        id="classtypes" 
+                        value={classtype} 
+                        required={true} 
+                        onChange={(evt) => setClasstype(evt.target.value)}
+                        >
+                        {classOptions.map((value) => (
+                        <option value={value} key={value}>
+                            {value}
+                        </option>
+                        ))}
+                    </select>
+                </label>
+                <label hidden={ classtype !== 'One-Time' ? true : false }>
+                    Date:
+                    <input type="date" min={today} 
+                            id="date" 
+                            name="date" 
+                            hidden={ classtype !== 'One-Time' ? true : false } 
+                            required={ classtype === 'One-Time' ? true : false }/>
+                </label>
+                <label hidden={ classtype !== 'Weekly' ? true : false }>
+                    Start Date:
+                    <input type="date" min={today} 
+                            id="startdate" 
+                            name="startdate" 
+                            hidden={ classtype !== 'Weekly' ? true : false } 
+                            required={ classtype === 'Weekly' ? true : false }/>
+                </label>
+                <label hidden={ classtype !== 'Weekly' ? true : false }>
+                    End Date:
+                    <input type="date" min={today} 
+                            id="enddate" 
+                            name="enddate" 
+                            hidden={ classtype !== 'Weekly' ? true : false } 
+                            required={ classtype === 'Weekly' ? true : false }/>
+                </label>
+            </div>
+            <div>
+                <label>
+                    Start Time:
+                    <input type="time" />
+                </label>
+                <label>
+                    End Time:
+                    <input type="time" />
+                </label>
+                <label>
+                    Price: $
+                    <input type="number" min="1" step="1" placeholder="0.00" />
+                </label>
+                <label>
+                    Style:
+                    <select 
+                        id="styles" 
+                        // value={style} 
+                        required={true} 
+                        // onChange={(evt) => setUsertype(evt.target.value)}
+                        >
+                        {styleOptions.map((value) => (
+                        <option value={value} key={value}>
+                            {value}
+                        </option>
+                        ))}
+                    </select>
+                </label>
+                <label>
+                    Level:
+                    <select 
+                        id="levels" 
+                        // value={level} 
+                        required={true} 
+                        // onChange={(evt) => setUsertype(evt.target.value)}
+                        >
+                        {levelOptions.map((value) => (
+                        <option value={value} key={value}>
+                            {value}
+                        </option>
+                        ))}
+                    </select>
+                </label>
+                <label>
+                    Instructor:
+                    <input type="text" />
+                </label>
             </div>
             </React.Fragment>
         );
@@ -448,28 +522,6 @@ function Navbar({loggedIn, handleLogOut}) {
 }
 
 
-// function UserInfo(props) {
-//     const { email, password} = props;
-//     const [values, setValues] = React.useState({
-//         password: "",
-//         showPassword: false,
-//       });
-
-//     return (
-//         <form>
-//             <label>
-//                 Email:
-//                 <input type="text" name="email" />
-//             </label>
-//             <label>
-//                 Password:
-//                 <input type={values.showPassword ? "text" : "password"} name="password" />
-//             </label>
-//         </form>
-//     )
-// }
-
-
 function Login({handleLogin, setEmail, setPassword}) {
 
     const [values, setValues] = React.useState({
@@ -555,7 +607,11 @@ function CreateAccount(props) {
             </h4>
             <label>
                 Account Type:
-                <select id="usertypes" value={usertype} required={true} onChange={(evt) => setUsertype(evt.target.value)}>
+                <select 
+                    id="usertypes" 
+                    value={usertype} 
+                    required={true} 
+                    onChange={(evt) => setUsertype(evt.target.value)}>
                     {options.map((value) => (
                     <option value={value} key={value}>
                         {value}
@@ -565,27 +621,55 @@ function CreateAccount(props) {
             </label>
             <label hidden={ usertype !== 'student' ? true : false }>
                 First Name:
-                <input type="text"  id="fname" name="fname" hidden={ usertype !== 'student' ? true : false } required={ usertype === 'student' ? true : false } onChange={(evt) => setFName(evt.target.value)} />
+                <input type="text"  
+                    id="fname" 
+                    name="fname" 
+                    hidden={ usertype !== 'student' ? true : false } 
+                    required={ usertype === 'student' ? true : false } 
+                    onChange={(evt) => setFName(evt.target.value)} />
             </label>
             <label hidden={ usertype !== 'student' ? true : false }>
                 Last Name:
-                <input type="text" id="lname" name="lname" hidden={ usertype !== 'student' ? true : false } required={ usertype === 'student' ? true : false } onChange={(evt) => setLName(evt.target.value)}  />
+                <input type="text" 
+                    id="lname" 
+                    name="lname" 
+                    hidden={ usertype !== 'student' ? true : false } 
+                    required={ usertype === 'student' ? true : false } 
+                    onChange={(evt) => setLName(evt.target.value)}  />
             </label>
             <label hidden={ usertype !== 'studio' ? true : false }>
                 Studio Name:
-                <input type="text" id="sname" name="sname" hidden={ usertype !== 'studio' ? true : false } required={ usertype === 'studio' ? true : false } onChange={(evt) => setSName(evt.target.value)}  />
+                <input type="text" 
+                    id="sname" 
+                    name="sname" 
+                    hidden={ usertype !== 'studio' ? true : false } 
+                    required={ usertype === 'studio' ? true : false } 
+                    onChange={(evt) => setSName(evt.target.value)}  />
             </label>
             <label hidden={ usertype !== 'studio' ? true : false }>
                 Studio Website:
-                <input type="text" id="website" name="website" hidden={ usertype !== 'studio' ? true : false } required={ usertype === 'studio' ? true : false } onChange={(evt) => setWebsite(evt.target.value)}  />
+                <input type="text"
+                    id="website"
+                    name="website" 
+                    hidden={ usertype !== 'studio' ? true : false } 
+                    required={ usertype === 'studio' ? true : false } 
+                    onChange={(evt) => setWebsite(evt.target.value)}  />
             </label>
             <label>
                 Email:
-                <input type="text" id="email" name="email" required={true} onChange={(evt) => setEmail(evt.target.value)} />
+                <input type="text" 
+                    id="email" 
+                    name="email" 
+                    required={true} 
+                    onChange={(evt) => setEmail(evt.target.value)} />
             </label>
             <label>
                 Password:
-                <input type={values.showPassword ? "text" : "password"} id="password" name="password" required={true} onChange={(evt) => setPassword(evt.target.value)} />
+                <input type={values.showPassword ? "text" : "password"} 
+                    id="password" 
+                    name="password" 
+                    required={true} 
+                    onChange={(evt) => setPassword(evt.target.value)} />
             </label>
             <input type="submit" value="Submit" />
         </form>

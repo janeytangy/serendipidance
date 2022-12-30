@@ -24,6 +24,9 @@ with open("data/danceclass.json") as f:
 # Create dance classes, store them in list so we can use them
 danceclass_in_db = []
 
+# Create studios, store them in list to convert to set
+studios_in_file = []
+
 for dance in danceclass_data:
 
     # read data
@@ -32,6 +35,8 @@ for dance in danceclass_data:
         dance["level"],
         dance["instructor"],
         dance["studio"])
+
+    studios_in_file.append((dance["studio"], dance["website"]))
 
     date = datetime.datetime.strptime(dance["date"], "%Y-%m-%d")
     start_time = datetime.datetime.strptime(dance["start_time"], "%H:%M")
@@ -45,4 +50,17 @@ model.db.session.add_all(danceclass_in_db)
 model.db.session.commit()
 
 
-# model.db.session.commit()
+# Create studio profiles
+
+studios = set(studios_in_file)
+
+studios_in_db = []
+
+for i, studio in enumerate(studios):
+    email = f'user{i}@test.com'
+    password = 'test'
+    studios_in_db.append(crud.create_user("", "", email, password, "studio", studio[0], studio[1]))
+
+
+model.db.session.add_all(studios_in_db)
+model.db.session.commit()
