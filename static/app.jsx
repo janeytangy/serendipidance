@@ -19,13 +19,10 @@ function App() {
       fetch("/api/classinstances")
         .then((response) => response.json())
         .then((classData) => {
-          console.log(classData);
           const classes = Object.values(classData);
-          console.log(classes);
           classes.sort(function(a,b){
             return new Date(a.date) - new Date(b.date)
           });
-          console.log(classes);
           setClass(classes);
         });
     }, []);
@@ -174,7 +171,8 @@ function App() {
           <ReactRouterDOM.Route exact path="/">
             <AllClasses classinstances={classinstances} 
                 addClassToSchedule={addClassToSchedule} 
-                loggedIn={loggedIn} />
+                loggedIn={loggedIn}
+                usertype={user.usertype} />
           </ReactRouterDOM.Route>
 
           {/* <ReactRouterDOM.Route exact path="/all-users">

@@ -1,9 +1,8 @@
 
 function ClassRow(props) {
-    const { id, date, start_time, end_time, price, style, level, instructor, studio, handleAddClass, loggedIn } = props;
+    const { id, date, start_time, end_time, price, style, level, instructor, studio, handleAddClass, loggedIn, usertype } = props;
 
-
-    if (loggedIn) {
+    if (loggedIn && usertype == "student") {
         return (
             <React.Fragment>
                 <tr key={id}>
@@ -11,10 +10,10 @@ function ClassRow(props) {
                         <span className="date">{date}</span>
                     </td>
                     <td>
-                        <span className="start time">{new Date(start_time).toLocaleTimeString("hh")}</span>
+                        <span className="start time">{start_time}</span>
                     </td>
                     <td>
-                        <span className="end time">{new Date(end_time).getHours()}:{new Date(end_time).getMinutes(2)}</span>
+                        <span className="end time">{end_time}</span>
                     </td>
                     <td>
                         <span className="price">${price.toFixed(2)}</span>
@@ -55,7 +54,7 @@ function ClassRow(props) {
                         <span className="start time">{start_time}</span>
                     </td>
                     <td>
-                        <span className="end time">{new Date(end_time).getHours()}:{new Date(end_time).getMinutes(2)}</span>
+                        <span className="end time">{end_time}</span>
                     </td>
                     <td>
                         <span className="price">${price.toFixed(2)}</span>
@@ -79,16 +78,17 @@ function ClassRow(props) {
   }
 
 function AllClasses(props) {
-    const { classinstances, addClassToSchedule, loggedIn } = props;
+    const { classinstances, addClassToSchedule, loggedIn, usertype } = props;
     const classRows = [];
   
     for (const classinstance of Object.values(classinstances)) {
+        
       const classRow = (
         <ClassRow
           id={classinstance.classinst_id}
-          date={new Date(classinstance.date).toDateString()}
-          start_time={classinstance.start_time}
-          end_time={classinstance.end_time}
+          date={new Date(classinstance.date).toUTCString().split(' ').slice(0, 4).join(' ')}
+          start_time={new Date(classinstance.start_time).toLocaleTimeString("en-US", { timeZone: 'UTC', hour: "2-digit", minute: "2-digit", hour12: true })}
+          end_time={new Date(classinstance.end_time).toLocaleTimeString("en-US", { timeZone: 'UTC', hour: "2-digit", minute: "2-digit", hour12: true })}
           price={classinstance.price}
           style={classinstance.style}
           level={classinstance.level}
@@ -96,6 +96,7 @@ function AllClasses(props) {
           studio={classinstance.studio}
           handleAddClass={addClassToSchedule}
           loggedIn={loggedIn}
+          usertype={usertype}
         />
       );
         
@@ -463,7 +464,7 @@ function Navbar({loggedIn, handleLogOut}) {
               activeClassName="navlink-active"
               className="nav-link"
             >
-              My Schedule
+              Schedule
             </ReactRouterDOM.NavLink>
             </h4>
 
