@@ -8,7 +8,8 @@ function App() {
                                             lname: localStorage.getItem("userLName"),
                                             email: localStorage.getItem("userEmail"),
                                             password: localStorage.getItem("userPassword"),
-                                            usertype: localStorage.getItem("userType")});
+                                            usertype: localStorage.getItem("userType"),
+                                            sname: localStorage.getItem("userSName")});
 
     const [loggedIn, setLoggedIn] = React.useState(JSON.parse(localStorage.getItem("isLoggedIn")));
     
@@ -71,7 +72,8 @@ function App() {
                                         lname: result.lname,
                                         email: result.email,
                                         password: result.password,
-                                        usertype: result.usertype
+                                        usertype: result.usertype,
+                                        sname: result.sname
             }));
             setLoggedIn(true);
             localStorage.setItem("isLoggedIn", true);
@@ -88,6 +90,7 @@ function App() {
         localStorage.setItem("userEmail", user.email);
         localStorage.setItem("userPassword", user.password);
         localStorage.setItem("userType", user.usertype);
+        localStorage.setItem("userSName", user.sname);
     }
 
     Promise.all([handleLogin, setSession()]);
@@ -102,7 +105,8 @@ function App() {
                 lname:"",
                 email:"",
                 password:"",
-                usertype:""});
+                usertype:"",
+                sname:""});
         
         let removeUser = await fetch("/logout", {
             method: "POST",

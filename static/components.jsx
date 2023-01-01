@@ -252,18 +252,9 @@ function AllClasses(props) {
 
 function Schedule(props) {
     const { user, schedule, setSchedule, classinstances, removeClassFromSchedule } = props;
-    const [classtype, setClasstype] = React.useState("");
     const tableData = [];
-    // let totalCost = 0;
 
-    const current = new Date();
-    const today = `${current.getFullYear()}-${current.getMonth()+1}-${current.getDate()}`
-
-    const classOptions = ["Choose below", "One-Time", "Weekly"];
-    const styleOptions = ["Choose below", "FOUNDATIONS", "HIPHOP", "KPOP"];
-    const levelOptions = ["Choose below", 
-                            "BEGINNER", "INTERMEDIATE", "ADVANCED",
-                            "MASTER", "ALL"];
+    // Student Schedule
 
     const onClick = (classinst_id) => {
         removeClassFromSchedule(classinst_id);
@@ -302,6 +293,51 @@ function Schedule(props) {
         );
     }
 
+    // Studio Schedule
+
+    const [classtype, setClasstype] = React.useState("");
+    const [date, setDate] = React.useState("");
+    const [startTime, setStartTime] = React.useState("");
+    const [endTime, setEndTime] = React.useState("");
+    const [price, setPrice] = React.useState("");
+    const [style, setStyle] = React.useState("");
+    const [level, setLevel] = React.useState("");
+    const [instructor, setInstructor] = React.useState("");
+
+    const current = new Date();
+    const today = `${current.getFullYear()}-${current.getMonth()+1}-${current.getDate()}`
+
+    const classOptions = ["Choose below", "One-Time", "Weekly"];
+    const styleOptions = ["Choose below", "FOUNDATIONS", "HIPHOP", "KPOP"];
+    const levelOptions = ["Choose below", 
+                            "BEGINNER", "INTERMEDIATE", "ADVANCED",
+                            "MASTER", "ALL"];
+    
+    function addClassInstanceToSchedule() {
+
+        let addClassInstance = fetch(`/studio/${user.id}`, {
+            method: "POST",
+            headers: {                
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+                },
+            body: JSON.stringify({
+                user_id: user.id,
+                date: date,
+                // start_date: startDate,
+                // end_date: endDate,
+                start_time: startTime, 
+                end_time: endTime, 
+                price: price, 
+                style: style, 
+                level: level, 
+                instructor: instructor, 
+                sname: user.sname
+            }),
+            
+        });
+    }
+
     if (user.usertype === "student"){
         return (
             <React.Fragment>
@@ -322,7 +358,118 @@ function Schedule(props) {
     } else if (user.usertype === "studio") {
         return (
             <React.Fragment>
-            <h1>Our Schedule</h1>
+                <form onSubmit={addClassInstanceToSchedule}>
+                    <h1>Our Schedule</h1>
+                    <div>
+                        <label>
+                            Please select the type of class you'd like to submit:
+                            <select 
+                                id="classtypes" 
+                                value={classtype} 
+                                required={true} 
+                                onChange={(evt) => setClasstype(evt.target.value)}
+                                >
+                                {classOptions.map((value) => (
+                                <option value={value} key={value}>
+                                    {value}
+                                </option>
+                                ))}
+                            </select>
+                        </label>
+                        <label hidden={ classtype !== 'One-Time' ? true : false }>
+                            Date:
+                            <input type="date" min={today} 
+                                    id="date"
+                                    value={date} 
+                                    name="date" 
+                                    hidden={ classtype !== 'One-Time' ? true : false } 
+                                    required={ classtype === 'One-Time' ? true : false }
+                                    onChange={(evt) => setDate(evt.target.value)} />
+                        </label>
+                        <label hidden={ classtype !== 'Weekly' ? true : false }>
+                            Start Date:
+                            <input type="date" min={today} 
+                                    id="start_date" 
+                                    name="start_date" 
+                                    hidden={ classtype !== 'Weekly' ? true : false } 
+                                    required={ classtype === 'Weekly' ? true : false }/>
+                        </label>
+                        <label hidden={ classtype !== 'Weekly' ? true : false }>
+                            End Date:
+                            <input type="date" min={today} 
+                                    id="end_date" 
+                                    name="end_date" 
+                                    hidden={ classtype !== 'Weekly' ? true : false } 
+                                    required={ classtype === 'Weekly' ? true : false }/>
+                        </label>
+                    </div>
+                    <div>
+                        <label>
+                            Start Time:
+                            <input type="time"
+                                    id="start_time"
+                                    value={startTime}
+                                    required={true}
+                                    onChange={(evt) => setStartTime(evt.target.value)} />
+                        </label>
+                        <label>
+                            End Time:
+                            <input type="time"
+                                    id="end_time"
+                                    value={endTime}
+                                    required={true}
+                                    onChange={(evt) => setEndTime(evt.target.value)} />
+                        </label>
+                        <label>
+                            Price: $
+                            <input type="number" min="1" step="1" placeholder="0.00"
+                                    id="price"
+                                    value={price}
+                                    required={true}
+                                    onChange={(evt) => setPrice(evt.target.value)} />
+                        </label>
+                        <label>
+                            Style:
+                            <select 
+                                id="style" 
+                                value={style} 
+                                required={true} 
+                                onChange={(evt) => setStyle(evt.target.value)}
+                                >
+                                {styleOptions.map((value) => (
+                                <option value={value} key={value}>
+                                    {value}
+                                </option>
+                                ))}
+                            </select>
+                        </label>
+                        <label>
+                            Level:
+                            <select 
+                                id="level" 
+                                value={level} 
+                                required={true} 
+                                onChange={(evt) => setLevel(evt.target.value)}
+                                >
+                                {levelOptions.map((value) => (
+                                <option value={value} key={value}>
+                                    {value}
+                                </option>
+                                ))}
+                            </select>
+                        </label>
+                        <label>
+                            Instructor:
+                            <input type="text"
+                            id="instructor" 
+                            value={instructor} 
+                            required={true} 
+                            onChange={(evt) => setInstructor(evt.target.value)}
+                            />
+                        </label>
+                        <input type="submit" value="Submit" />
+                    </div>
+                </form>
             <div>
                 <table className="table">
                 <thead>
@@ -335,102 +482,12 @@ function Schedule(props) {
                 </tbody>
                 </table>
             </div>
-            <div>
-                <label>
-                    Please select the type of class you'd like to submit:
-                    <select 
-                        id="classtypes" 
-                        value={classtype} 
-                        required={true} 
-                        onChange={(evt) => setClasstype(evt.target.value)}
-                        >
-                        {classOptions.map((value) => (
-                        <option value={value} key={value}>
-                            {value}
-                        </option>
-                        ))}
-                    </select>
-                </label>
-                <label hidden={ classtype !== 'One-Time' ? true : false }>
-                    Date:
-                    <input type="date" min={today} 
-                            id="date" 
-                            name="date" 
-                            hidden={ classtype !== 'One-Time' ? true : false } 
-                            required={ classtype === 'One-Time' ? true : false }/>
-                </label>
-                <label hidden={ classtype !== 'Weekly' ? true : false }>
-                    Start Date:
-                    <input type="date" min={today} 
-                            id="startdate" 
-                            name="startdate" 
-                            hidden={ classtype !== 'Weekly' ? true : false } 
-                            required={ classtype === 'Weekly' ? true : false }/>
-                </label>
-                <label hidden={ classtype !== 'Weekly' ? true : false }>
-                    End Date:
-                    <input type="date" min={today} 
-                            id="enddate" 
-                            name="enddate" 
-                            hidden={ classtype !== 'Weekly' ? true : false } 
-                            required={ classtype === 'Weekly' ? true : false }/>
-                </label>
-            </div>
-            <div>
-                <label>
-                    Start Time:
-                    <input type="time" />
-                </label>
-                <label>
-                    End Time:
-                    <input type="time" />
-                </label>
-                <label>
-                    Price: $
-                    <input type="number" min="1" step="1" placeholder="0.00" />
-                </label>
-                <label>
-                    Style:
-                    <select 
-                        id="styles" 
-                        // value={style} 
-                        required={true} 
-                        // onChange={(evt) => setUsertype(evt.target.value)}
-                        >
-                        {styleOptions.map((value) => (
-                        <option value={value} key={value}>
-                            {value}
-                        </option>
-                        ))}
-                    </select>
-                </label>
-                <label>
-                    Level:
-                    <select 
-                        id="levels" 
-                        // value={level} 
-                        required={true} 
-                        // onChange={(evt) => setUsertype(evt.target.value)}
-                        >
-                        {levelOptions.map((value) => (
-                        <option value={value} key={value}>
-                            {value}
-                        </option>
-                        ))}
-                    </select>
-                </label>
-                <label>
-                    Instructor:
-                    <input type="text" />
-                </label>
-            </div>
             </React.Fragment>
         );
     }
 
     
 }
-
 
 
 function Navbar({loggedIn, handleLogOut}) {
@@ -521,7 +578,6 @@ function Navbar({loggedIn, handleLogOut}) {
     );
   }
 }
-
 
 function Login({handleLogin, setEmail, setPassword}) {
 

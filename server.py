@@ -4,6 +4,7 @@ from flask import (Flask, render_template, request, flash, session,
                    redirect, jsonify)
 from model import User, connect_to_db, db
 import crud
+import datetime
 
 app = Flask(__name__)
 app.secret_key = "serendipity"
@@ -40,7 +41,8 @@ def login():
                 "lname": user.lname,
                 "email": user.email,
                 "password": user.password,
-                "usertype": user.usertype
+                "usertype": user.usertype,
+                "sname": user.sname
             })
 
         else:
@@ -96,6 +98,10 @@ def get_class_instances():
 #     users = User.query.all()
 #     return jsonify({user.user_id: user.to_dict() for user in users})
 
+
+
+# SCHEDULE - Student Usertype
+
 @app.route('/<user_id>', methods= ['POST'])
 def add_class_to_schedule(user_id):
     """Create userclass instance"""
@@ -129,6 +135,36 @@ def remove_class(user_id, class_id):
     db.session.delete(userclass)
     db.session.commit()
 
+    return redirect("/")
+
+
+# SCHEDULE - Studio Usertype
+
+@app.route('/studio/<user_id>', methods= ['POST'])
+def add_classinstance_to_schedule(user_id):
+    """Create new class instance"""
+
+    # user_id = user_id
+    # date = request.json.get('date')
+    date = datetime.datetime.strptime(request.json.get('date'), "%Y-%m-%d")
+    # start_time = request.json.get('start_time')
+    start_time = datetime.datetime.strptime(request.json.get('start_time') + ' PST', "%H:%M %Z")
+    # end_time = request.json.get('end_time')
+    end_time = datetime.datetime.strptime(request.json.get('end_time') + ' PST', "%H:%M %Z")
+    price = request.json.get('price')
+    style = request.json.get('style')
+    level = request.json.get('level')
+    instructor = request.json.get('instructor')
+    sname = request.json.get('sname')
+
+    print("*"*35)
+    print(start_time)
+    print(end_time)
+
+    new_class = crud.create_classinstance(date, start_time, end_time, price, style, level, instructor, sname)
+
+    db.session.add(new_class)
+    db.session.commit()
     return redirect("/")
 
 

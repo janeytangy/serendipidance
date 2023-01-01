@@ -32,7 +32,7 @@ class User(db.Model):
     class_event = db.relationship("ClassEvent", back_populates="user")
 
     def __repr__(self):
-        return f'<User user_id={self.user_id} fname={self.fname} lname={self.lname} email={self.email} usertype={self.usertype}>'
+        return f'<User user_id={self.user_id} fname={self.sname} lname={self.lname} email={self.email} usertype={self.usertype}>'
     
     def to_dict(self):
         return {'user_id': self.user_id,
