@@ -7,6 +7,7 @@
         "style": "KPOP",
         "level": "BEGINNER",
         "instructor": "Qingqing Yang",
+        "studio_id": "3",
         "studio": "Enjoy Dance Studio",
         "website": "https://www.eds.dance/"
     },
@@ -18,6 +19,7 @@
         "style": "HIPHOP",
         "level": "INTERMEDIATE",
         "instructor": "Alex Kahng",
+        "studio_id": "3",
         "studio": "Enjoy Dance Studio",
         "website": "https://www.eds.dance/"
     },
@@ -29,6 +31,7 @@
         "style": "HIPHOP",
         "level": "ADVANCED",
         "instructor": "Arvin Valmonte",
+        "studio_id": "4",
         "studio": "In the Groove Studios",
         "website": "https://inthegroovestudios.org/"
     },
@@ -40,6 +43,7 @@
         "style": "HIPHOP",
         "level": "MASTER",
         "instructor": "Beom",
+        "studio_id": "4",
         "studio": "In the Groove Studios",
         "website": "https://inthegroovestudios.org/"
     },
@@ -51,6 +55,7 @@
         "style": "KPOP",
         "level": "BEGINNER",
         "instructor": "Michelle Chen",
+        "studio_id": "2",
         "studio": "City Dance Studios",
         "website": "https://www.citydancesf.com/"
     },
@@ -62,8 +67,9 @@
         "style": "HIPHOP",
         "level": "INTERMEDIATE",
         "instructor": "Daniel Kang",
+        "studio_id": "1",
         "studio": "On One Studios",
-        "website": "https://inthegroovestudios.org/"
+        "website": "https://ononestudios.com/"
     },
     {
         "date": "2023-01-23",
@@ -73,6 +79,7 @@
         "style": "KPOP",
         "level": "ADVANCED",
         "instructor": "Nana",
+        "studio_id": "3",
         "studio": "Enjoy Dance Studio",
         "website": "https://www.eds.dance/"
     },
@@ -84,6 +91,7 @@
         "style": "FOUNDATIONS",
         "level": "ALL",
         "instructor": "Qingqing Yang",
+        "studio_id": "4",
         "studio": "In the Groove Studios",
         "website": "https://inthegroovestudios.org/"
     },
@@ -95,6 +103,7 @@
         "style": "FOUNDATIONS",
         "level": "ALL",
         "instructor": "Qingqing Yang",
+        "studio_id": "2",
         "studio": "City Dance Studios",
         "website": "https://www.citydancesf.com/"
     },
@@ -106,6 +115,7 @@
         "style": "HIPHOP",
         "level": "MASTER",
         "instructor": "Tarzan",
+        "studio_id": "4",
         "studio": "In the Groove Studios",
         "website": "https://inthegroovestudios.org/"
     },
@@ -117,6 +127,7 @@
         "style": "HIPHOP",
         "level": "ADVANCED",
         "instructor": "Alex Kahng",
+        "studio_id": "1",
         "studio": "On One Studios",
         "website": "https://ononestudios.com/"
     }

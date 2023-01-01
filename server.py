@@ -120,7 +120,7 @@ def add_class_to_schedule(user_id):
 
 @app.route('/api/<user_id>')
 def get_schedule_by_user_id(user_id):
-    """View schedule by user id"""
+    """View schedule by student user id"""
 
     userclasses = crud.get_classinstances_by_user_id(user_id)
 
@@ -128,7 +128,7 @@ def get_schedule_by_user_id(user_id):
 
 @app.route('/<user_id>/<class_id>', methods= ['POST'])
 def remove_class(user_id, class_id):
-    """Remove class for user"""
+    """Remove class for student user"""
 
     userclass = crud.get_userclass(user_id, class_id)
 
@@ -143,29 +143,43 @@ def remove_class(user_id, class_id):
 @app.route('/studio/<user_id>', methods= ['POST'])
 def add_classinstance_to_schedule(user_id):
     """Create new class instance"""
-
-    # user_id = user_id
-    # date = request.json.get('date')
-    date = datetime.datetime.strptime(request.json.get('date'), "%Y-%m-%d")
-    # start_time = request.json.get('start_time')
+    
+    # date = datetime.datetime.strptime(request.json.get('date'), "%Y-%m-%d")
+    start_date = datetime.datetime.strptime(request.json.get('start_date'), "%Y-%m-%d")
+    end_date = datetime.datetime.strptime(request.json.get('end_date'), "%Y-%m-%d")
     start_time = datetime.datetime.strptime(request.json.get('start_time') + ' PST', "%H:%M %Z")
-    # end_time = request.json.get('end_time')
     end_time = datetime.datetime.strptime(request.json.get('end_time') + ' PST', "%H:%M %Z")
     price = request.json.get('price')
     style = request.json.get('style')
     level = request.json.get('level')
     instructor = request.json.get('instructor')
     sname = request.json.get('sname')
+    timedelta = datetime.timedelta(days=7)
 
-    print("*"*35)
-    print(start_time)
-    print(end_time)
+    new_classes = crud.create_classevent(start_date, end_date, start_time, end_time, price, style, level, instructor, sname, timedelta, user_id)
 
-    new_class = crud.create_classinstance(date, start_time, end_time, price, style, level, instructor, sname)
-
-    db.session.add(new_class)
+    db.session.add_all(new_classes)
     db.session.commit()
     return redirect("/")
+
+@app.route('/api/studio/<user_id>')
+def get_schedule_by_studio_id(user_id):
+    """View schedule by studio user id"""
+
+    studio_classes = crud.get_class_instances_by_studio(user_id)
+
+    return jsonify({studio_class.classinst_id: studio_class.to_dict() for studio_class in studio_classes})
+
+# @app.route('/studio/<user_id>/<class_id>', methods= ['POST'])
+# def remove_class(user_id, class_id):
+#     """Remove class for studio user"""
+
+#     userclass = crud.get_userclass(user_id, class_id)
+
+#     db.session.delete(userclass)
+#     db.session.commit()
+
+#     return redirect("/")
 
 
 

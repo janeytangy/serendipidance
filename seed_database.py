@@ -44,7 +44,7 @@ for dance in danceclass_data:
 
     danceclass_in_db.append(crud.create_classinstance(date, 
             start_time, end_time, price, style, level, instructor, studio))
-    
+
 
 model.db.session.add_all(danceclass_in_db)
 model.db.session.commit()

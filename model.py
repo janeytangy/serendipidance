@@ -54,11 +54,15 @@ class ClassEvent(db.Model):
     price = db.Column(db.Integer, nullable=False)
     style = db.Column(db.String, nullable=False)
     level = db.Column(db.String, nullable=False)
+    instructor = db.Column(db.String, nullable=False)
 
     user_id = db.Column(db.Integer, db.ForeignKey("user.user_id"))
 
-    class_instance = db.relationship("ClassInstance", back_populates="class_event")
+    class_instances = db.relationship("ClassInstance", back_populates="class_event")
     user = db.relationship("User", back_populates="class_event")
+
+    def __repr__(self):
+        return f'<ClassEvent classinst_id={self.class_id} user={self.user_id}>'
 
 
 class ClassInstance(db.Model):
@@ -80,7 +84,7 @@ class ClassInstance(db.Model):
     class_id = db.Column(db.Integer, db.ForeignKey("class_event.class_id"))
 
     userclass = db.relationship("UserClass", back_populates="class_instance")
-    class_event = db.relationship("ClassEvent", back_populates="class_instance")
+    class_event = db.relationship("ClassEvent", back_populates="class_instances")
 
     def __repr__(self):
         return f'<ClassInstance classinst_id={self.classinst_id} date={self.date} level={self.level}>'

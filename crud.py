@@ -6,6 +6,8 @@ from model import (db,
     ClassEvent, ClassInstance, 
     connect_to_db)
 
+import datetime
+
 
 # USER-RELATED
 
@@ -29,21 +31,42 @@ def get_user_by_email(email):
 
     return User.query.filter(User.email == email).first()
 
+def get_classinstances_by_studio_id(user_id):
+    """Return all class instances of a studio user id"""
+
+    studios = ClassEvent.query.filter(ClassEvent.user_id==user_id).all()
+
+    return {studio.classinst_id: studio.to_dict() for studio in studios}
+
 
 # CLASS EVENT-RELATED
 
-def create_classevent(start_date, end_date, start_time, end_time, price, style, level):
+def create_classevent(start_date, end_date, start_time, end_time, price, style, level, instructor, studio, timedelta, user_id):
     """Create and return a new class event."""
 
-    return ClassEvent(
-        start_date=start_date, 
-        end_date=end_date, 
-        start_time=start_time, 
-        end_time=end_time,
-        price=price,
-        style=style,
-        level=level
-    )
+    # class_event = ClassEvent(
+    #                 start_date=start_date, 
+    #                 end_date=end_date,
+    #                 start_time=start_time, 
+    #                 end_time=end_time,
+    #                 price=price,
+    #                 style=style,
+    #                 level=level,
+    #                 instructor=instructor, 
+    #                 user_id=user_id           
+    #             )
+
+    new_classes = []
+
+    while True:
+        date = start_date
+        new_classes.append(create_classinstance(date, start_time, end_time, price, style, level, instructor, studio))
+        new_date = start_date + timedelta
+        start_date = new_date
+        if start_date > end_date:
+            break
+
+    return new_classes
 
 def get_classevent():
     """Returns all class events"""
@@ -64,7 +87,7 @@ def create_classinstance(date, start_time, end_time, price, style, level, instru
         style=style,
         level=level,
         instructor=instructor, 
-        studio=studio           
+        studio=studio          
     )
 
 def get_classinstances():
@@ -76,6 +99,15 @@ def get_class_instance_by_id(classinst_id):
     """Return class instance info by id"""
 
     return ClassInstance.query.get(classinst_id)
+
+def get_class_instances_by_studio(user_id):
+    """Return all class instances of a studio"""
+
+    q = User.query.filter(User.user_id == user_id).first()
+
+    studio_name = q.sname
+
+    return ClassInstance.query.filter(ClassInstance.studio==studio_name).all()
 
 
 # USERTYPE-RELATED

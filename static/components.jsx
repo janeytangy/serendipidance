@@ -296,13 +296,15 @@ function Schedule(props) {
     // Studio Schedule
 
     const [classtype, setClasstype] = React.useState("");
-    const [date, setDate] = React.useState("");
+    const [startDate, setStartDate] = React.useState("");
+    const [endDate, setEndDate] = React.useState("");
     const [startTime, setStartTime] = React.useState("");
     const [endTime, setEndTime] = React.useState("");
     const [price, setPrice] = React.useState("");
     const [style, setStyle] = React.useState("");
     const [level, setLevel] = React.useState("");
     const [instructor, setInstructor] = React.useState("");
+    const [studioSchedule, setStudioSchedule] = React.useState("");
 
     const current = new Date();
     const today = `${current.getFullYear()}-${current.getMonth()+1}-${current.getDate()}`
@@ -313,6 +315,63 @@ function Schedule(props) {
                             "BEGINNER", "INTERMEDIATE", "ADVANCED",
                             "MASTER", "ALL"];
     
+    const studioData = [];
+
+    const onStudioClick = (classinst_id) => {
+        removeStudioClass(classinst_id);
+        fetchStudioSchedule();
+    }
+    const fetchStudioSchedule = () => {
+        fetch(`/api/studio/${user.id}`)
+        .then((response) => response.json())
+        .then((result) => {
+        setStudioSchedule(result);
+        });
+    }
+    // function removeStudioClass(classId) {
+    //     fetch(`/studio/${user.id}/${classId}`, {
+    //         method: "POST",
+    //         headers: {                
+    //             'Accept': 'application/json',
+    //             'Content-Type': 'application/json'
+    //           },
+    //         body: JSON.stringify({
+    //             user_id: user.id,
+    //             class_id: classId
+    //         }),
+    //     });
+    // }
+
+    React.useEffect(() => {
+        fetchStudioSchedule();
+    }, []);
+
+    for (const classinst_id in studioSchedule) {
+
+        const newClass = classinstances[Number(classinst_id)];
+
+        studioData.push(
+        <tr key={classinst_id}>
+            <td>{newClass.date}</td>
+            {/* <td>${melonCost.toFixed(2)}</td> */}
+            <td>
+                    <button
+                        type="button"
+                        className="btn btn-sm btn-success d-inline-block"
+                        onClick={() => onStudioClick(classinst_id)}
+                    >
+                        Remove
+                    </button>
+                </td>
+        </tr>
+        );
+    }
+
+    function setDate(date) {
+        setStartDate(date);
+        setEndDate(date);
+    }
+
     function addClassInstanceToSchedule() {
 
         let addClassInstance = fetch(`/studio/${user.id}`, {
@@ -323,9 +382,9 @@ function Schedule(props) {
                 },
             body: JSON.stringify({
                 user_id: user.id,
-                date: date,
-                // start_date: startDate,
-                // end_date: endDate,
+                // date: date,
+                start_date: startDate,
+                end_date: endDate,
                 start_time: startTime, 
                 end_time: endTime, 
                 price: price, 
@@ -380,7 +439,6 @@ function Schedule(props) {
                             Date:
                             <input type="date" min={today} 
                                     id="date"
-                                    value={date} 
                                     name="date" 
                                     hidden={ classtype !== 'One-Time' ? true : false } 
                                     required={ classtype === 'One-Time' ? true : false }
@@ -392,7 +450,8 @@ function Schedule(props) {
                                     id="start_date" 
                                     name="start_date" 
                                     hidden={ classtype !== 'Weekly' ? true : false } 
-                                    required={ classtype === 'Weekly' ? true : false }/>
+                                    required={ classtype === 'Weekly' ? true : false }
+                                    onChange={(evt) => setStartDate(evt.target.value)} />
                         </label>
                         <label hidden={ classtype !== 'Weekly' ? true : false }>
                             End Date:
@@ -400,7 +459,8 @@ function Schedule(props) {
                                     id="end_date" 
                                     name="end_date" 
                                     hidden={ classtype !== 'Weekly' ? true : false } 
-                                    required={ classtype === 'Weekly' ? true : false }/>
+                                    required={ classtype === 'Weekly' ? true : false }
+                                    onChange={(evt) => setEndDate(evt.target.value)} />
                         </label>
                     </div>
                     <div>
@@ -478,7 +538,7 @@ function Schedule(props) {
                     </tr>
                 </thead>
                 <tbody>
-                    <p>Display classes after adding</p>
+                    {studioData}
                 </tbody>
                 </table>
             </div>
