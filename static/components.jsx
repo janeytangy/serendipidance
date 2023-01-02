@@ -264,7 +264,11 @@ function Schedule(props) {
         fetch(`/api/${user.id}`)
         .then((response) => response.json())
         .then((result) => {
-        setSchedule(result);
+        const classes = Object.values(result);
+        classes.sort(function(a,b){
+            return new Date(a.date) - new Date(b.date)
+        });
+        setSchedule(classes);
         });
     }
 
@@ -274,7 +278,7 @@ function Schedule(props) {
 
     for (const classinst_id in schedule) {
 
-        const newClass = classinstances[Number(classinst_id)];
+        const newClass = schedule[Number(classinst_id)];
 
         tableData.push(
         <tr key={classinst_id}>
@@ -284,7 +288,7 @@ function Schedule(props) {
                     <button
                         type="button"
                         className="btn btn-sm btn-success d-inline-block"
-                        onClick={() => onClick(classinst_id)}
+                        onClick={() => onClick(newClass.classinst_id)}
                     >
                         Remove
                     </button>
@@ -319,28 +323,33 @@ function Schedule(props) {
 
     const onStudioClick = (classinst_id) => {
         removeStudioClass(classinst_id);
+        location.reload();
         fetchStudioSchedule();
     }
     const fetchStudioSchedule = () => {
         fetch(`/api/studio/${user.id}`)
         .then((response) => response.json())
         .then((result) => {
-        setStudioSchedule(result);
+          const classes = Object.values(result);
+          classes.sort(function(a,b){
+            return new Date(a.date) - new Date(b.date)
+          });
+          setStudioSchedule(classes);
         });
     }
-    // function removeStudioClass(classId) {
-    //     fetch(`/studio/${user.id}/${classId}`, {
-    //         method: "POST",
-    //         headers: {                
-    //             'Accept': 'application/json',
-    //             'Content-Type': 'application/json'
-    //           },
-    //         body: JSON.stringify({
-    //             user_id: user.id,
-    //             class_id: classId
-    //         }),
-    //     });
-    // }
+    function removeStudioClass(classId) {
+        fetch(`/studio/${user.id}/${classId}`, {
+            method: "POST",
+            headers: {                
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+              },
+            body: JSON.stringify({
+                user_id: user.id,
+                class_id: classId
+            }),
+        });
+    }
 
     React.useEffect(() => {
         fetchStudioSchedule();
@@ -348,17 +357,17 @@ function Schedule(props) {
 
     for (const classinst_id in studioSchedule) {
 
-        const newClass = classinstances[Number(classinst_id)];
+        const newStudioClass = studioSchedule[Number(classinst_id)];
 
         studioData.push(
         <tr key={classinst_id}>
-            <td>{newClass.date}</td>
+            <td>{newStudioClass.date}</td>
             {/* <td>${melonCost.toFixed(2)}</td> */}
             <td>
                     <button
                         type="button"
                         className="btn btn-sm btn-success d-inline-block"
-                        onClick={() => onStudioClick(classinst_id)}
+                        onClick={() => onStudioClick(newStudioClass.classinst_id)}
                     >
                         Remove
                     </button>
@@ -382,7 +391,6 @@ function Schedule(props) {
                 },
             body: JSON.stringify({
                 user_id: user.id,
-                // date: date,
                 start_date: startDate,
                 end_date: endDate,
                 start_time: startTime, 
@@ -418,7 +426,8 @@ function Schedule(props) {
         return (
             <React.Fragment>
                 <form onSubmit={addClassInstanceToSchedule}>
-                    <h1>Our Schedule</h1>
+                    <h3>{user.sname}</h3>
+                    <h1>Schedule</h1>
                     <div>
                         <label>
                             Please select the type of class you'd like to submit:

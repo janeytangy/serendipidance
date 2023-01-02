@@ -170,16 +170,16 @@ def get_schedule_by_studio_id(user_id):
 
     return jsonify({studio_class.classinst_id: studio_class.to_dict() for studio_class in studio_classes})
 
-# @app.route('/studio/<user_id>/<class_id>', methods= ['POST'])
-# def remove_class(user_id, class_id):
-#     """Remove class for studio user"""
+@app.route('/studio/<user_id>/<class_id>', methods= ['POST'])
+def remove_studio_class(user_id, class_id):
+    """Remove class for studio user"""
 
-#     userclass = crud.get_userclass(user_id, class_id)
+    classinstance = crud.get_class_instance_by_id(class_id)
 
-#     db.session.delete(userclass)
-#     db.session.commit()
+    db.session.delete(classinstance)
+    db.session.commit()
 
-#     return redirect("/")
+    return redirect("/")
 
 
 
