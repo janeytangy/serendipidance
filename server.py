@@ -17,8 +17,8 @@ def homepage():
     return render_template("homepage.html")
 
 @app.route("/<path>")
-def dashboard(path):
-    """Dashboard"""
+def schedule(path):
+    """Schedule"""
     
     return render_template("homepage.html")
 
