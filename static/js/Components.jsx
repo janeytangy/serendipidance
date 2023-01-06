@@ -106,20 +106,21 @@ function AllClasses(props) {
 
     return (
       <React.Fragment key={classinstances.id}>
-        <h4>Upcoming Classes</h4>
         <div id="class-schedule">
-            <div>
-                <table className="class">
+            <div id="all-classes">
+            <h4 class="mb-4">Upcoming Classes</h4>
+                <table className="table table-hover">
                     <thead>
                         <tr>
-                            <th>Date</th>
-                            <th>Start Time</th>
-                            <th>End Time</th>
-                            <th>Price</th>
-                            <th>Style</th>
-                            <th>Level</th>
-                            <th>Instructor</th>
-                            <th>Studio</th>
+                            <th scope="col">Date</th>
+                            <th scope="col">Start Time</th>
+                            <th scope="col">End Time</th>
+                            <th scope="col">Price</th>
+                            <th scope="col">Style</th>
+                            <th scope="col">Level</th>
+                            <th scope="col">Instructor</th>
+                            <th scope="col">Studio</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -303,32 +304,34 @@ function Schedule(props) {
     if (user.usertype === "student"){
         return (
             <React.Fragment>
-            <h3>Hi, {user.fname}</h3>
-            <h1>Schedule</h1>
-            <div className="col-12">
-                <table className="table">
-                <thead>
-                    <tr>
-                    <th>Date</th>
-                    <th>Start Time</th>
-                    <th>End Time</th>
-                    <th>Price</th>
-                    <th>Style</th>
-                    <th>Level</th>
-                    <th>Instructor</th>
-                    <th>Studio</th>
-                    </tr>
-                </thead>
-                <tbody>{tableData}</tbody>
-                </table>
-                {/* <p className="lead">Total: ${totalCost.toFixed(2)}</p> */}
-            </div>
+                <h3>Hi, {user.fname}</h3>
+                <h1>Schedule</h1>
+                <div id="student">
+                    <table className="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Start Time</th>
+                            <th>End Time</th>
+                            <th>Price</th>
+                            <th>Style</th>
+                            <th>Level</th>
+                            <th>Instructor</th>
+                            <th>Studio</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>{tableData}</tbody>
+                    </table>
+                    {/* <p className="lead">Total: ${totalCost.toFixed(2)}</p> */}
+                </div>
             </React.Fragment>
         );
     } else if (user.usertype === "studio") {
         return (
             <React.Fragment>
-                <form onSubmit={addClassInstanceToSchedule}>
+            <div>
+                <form id="add-class" onSubmit={addClassInstanceToSchedule}>
                     <h3>{user.sname}</h3>
                     <h1>Schedule</h1>
                     <div>
@@ -442,17 +445,19 @@ function Schedule(props) {
                         <input type="submit" value="Submit" />
                     </div>
                 </form>
-            <div className="col-12">
-                <table className="table">
+            </div>
+            <div id="studio">
+                <table className="table table-hover">
                 <thead>
                     <tr>
-                    <th>Date</th>
-                    <th>Start Time</th>
-                    <th>End Time</th>
-                    <th>Price</th>
-                    <th>Style</th>
-                    <th>Level</th>
-                    <th>Instructor</th>
+                        <th>Date</th>
+                        <th>Start Time</th>
+                        <th>End Time</th>
+                        <th>Price</th>
+                        <th>Style</th>
+                        <th>Level</th>
+                        <th>Instructor</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -479,10 +484,7 @@ function Navbar({loggedIn, handleLogOut}) {
                         className="navbar-brand">
                         serendipidance
                 </ReactRouterDOM.NavLink>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarToggler" aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarToggler">
+                <div>
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
                         <ReactRouterDOM.NavLink
@@ -522,36 +524,32 @@ function Navbar({loggedIn, handleLogOut}) {
 
     return (
         <React.Fragment>
-        <nav class="navbar navbar-expand-lg">
+        <nav class="navbar sticky-top navbar-expand-lg">
             <div class="container-fluid">
                 <ReactRouterDOM.NavLink
                         to="/"
                         className="navbar-brand">
                         serendipidance
                 </ReactRouterDOM.NavLink>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarToggler" aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarToggler">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <ReactRouterDOM.NavLink
-                        to="/"
-                        activeClassName="navlink-active"
-                        className="nav-link"
-                        >
-                        Home
-                        </ReactRouterDOM.NavLink>
-                    </li>
-                    <li class="nav-item">
-                        <ReactRouterDOM.NavLink
-                        to="/login"
-                        activeClassName="navlink-active"
-                        className="nav-link">
-                        Sign Up / Login
-                        </ReactRouterDOM.NavLink>
-                    </li>
-                </ul>
+                <div>
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <ReactRouterDOM.NavLink
+                            to="/"
+                            activeClassName="navlink-active"
+                            className="nav-link">
+                            Home
+                            </ReactRouterDOM.NavLink>
+                        </li>
+                        <li class="nav-item">
+                            <ReactRouterDOM.NavLink
+                            to="/login"
+                            activeClassName="navlink-active"
+                            className="nav-link">
+                            Sign Up / Login
+                            </ReactRouterDOM.NavLink>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </nav>
@@ -571,21 +569,30 @@ function Login({handleLogin, setEmail, setPassword}) {
 
     return (
         <div>
-            <form onSubmit={handleLogin}>
-                <h4>
+            <form class="col-sm-5 col-md-4 col-lg-3" onSubmit={handleLogin}>
+                <h4 class="mb-3">
                     Login
                 </h4>
-                <label>
-                Email:
-                <input type="text" id="email" name="email" onChange={setEmail} />
-                </label>
-                <label>
-                    Password:
-                    <input type={values.showPassword ? "text" : "password"} id="password" name="password" onChange={setPassword} />
-                </label>
-                <input type="submit" value="Submit" />
+                <div class="mb-2">
+                    <input type="text"
+                            class="form-control mb-2" 
+                            id="email" 
+                            name="email" 
+                            onChange={setEmail}
+                            placeholder="Email" aria-label="Email" />
+
+                    <input type={values.showPassword ? "text" : "password"} 
+                            class="form-control mb-2"
+                            id="password" 
+                            name="password" 
+                            onChange={setPassword}
+                            placeholder="Password" aria-label="Password" />
+                </div>
+                <div class="container-fluid">
+                    <input type="submit" class="btn submit" value="Submit" />
+                    <ReactRouterDOM.Link to='/create' className="btn create">Create A New Account</ReactRouterDOM.Link>
+                </div>
             </form>
-            <ReactRouterDOM.Link to='/create' className="create">Create A New Account</ReactRouterDOM.Link>
         </div>
     );
 }
@@ -639,78 +646,75 @@ function CreateAccount(props) {
 
 
     return (
-        <form onSubmit={handleSubmit}>
-            <h4>
-                Create Account
-            </h4>
-            <label>
-                Account Type:
-                <select 
-                    id="usertypes" 
-                    value={usertype} 
-                    required={true} 
-                    onChange={(evt) => setUsertype(evt.target.value)}>
-                    {options.map((value) => (
-                    <option value={value} key={value}>
-                        {value}
-                    </option>
-                    ))}
-                </select>
-            </label>
-            <label hidden={ usertype !== 'student' ? true : false }>
-                First Name:
+        <div>
+            <form class="col-sm-5 col-md-4 col-lg-3" onSubmit={handleSubmit}>
+                <h4 class="mb-3">
+                    Create Account
+                </h4>
+                <label>
+                    Account Type:
+                    <select 
+                        id="usertypes"
+                        class="mb-2" 
+                        value={usertype} 
+                        required={true} 
+                        onChange={(evt) => setUsertype(evt.target.value)}>
+                        {options.map((value) => (
+                        <option value={value} key={value}>
+                            {value}
+                        </option>
+                        ))}
+                    </select>
+                </label>
                 <input type="text"  
                     id="fname" 
+                    class="form-control mb-2"
                     name="fname" 
                     hidden={ usertype !== 'student' ? true : false } 
                     required={ usertype === 'student' ? true : false } 
-                    onChange={(evt) => setFName(evt.target.value)} />
-            </label>
-            <label hidden={ usertype !== 'student' ? true : false }>
-                Last Name:
+                    onChange={(evt) => setFName(evt.target.value)}
+                    placeholder="First Name" aria-label="First Name" />
                 <input type="text" 
                     id="lname" 
+                    class="form-control mb-2"
                     name="lname" 
                     hidden={ usertype !== 'student' ? true : false } 
                     required={ usertype === 'student' ? true : false } 
-                    onChange={(evt) => setLName(evt.target.value)}  />
-            </label>
-            <label hidden={ usertype !== 'studio' ? true : false }>
-                Studio Name:
+                    onChange={(evt) => setLName(evt.target.value)}
+                    placeholder="Last Name" aria-label="Last Name"  />
                 <input type="text" 
                     id="sname" 
+                    class="form-control mb-2"
                     name="sname" 
                     hidden={ usertype !== 'studio' ? true : false } 
                     required={ usertype === 'studio' ? true : false } 
-                    onChange={(evt) => setSName(evt.target.value)}  />
-            </label>
-            <label hidden={ usertype !== 'studio' ? true : false }>
-                Studio Website:
+                    onChange={(evt) => setSName(evt.target.value)}
+                    placeholder="Studio Name" aria-label="Studio Name"  />
                 <input type="text"
                     id="website"
+                    class="form-control mb-2"
                     name="website" 
                     hidden={ usertype !== 'studio' ? true : false } 
                     required={ usertype === 'studio' ? true : false } 
-                    onChange={(evt) => setWebsite(evt.target.value)}  />
-            </label>
-            <label>
-                Email:
+                    onChange={(evt) => setWebsite(evt.target.value)}
+                    placeholder="Studio Website" aria-label="Studio Website"  />
                 <input type="text" 
                     id="email" 
+                    class="form-control mb-2"
                     name="email" 
                     required={true} 
-                    onChange={(evt) => setEmail(evt.target.value)} />
-            </label>
-            <label>
-                Password:
+                    onChange={(evt) => setEmail(evt.target.value)}
+                    placeholder="Email" aria-label="Email" />
                 <input type={values.showPassword ? "text" : "password"} 
                     id="password" 
+                    class="form-control mb-2"
                     name="password" 
                     required={true} 
-                    onChange={(evt) => setPassword(evt.target.value)} />
-            </label>
-            <input type="submit" value="Submit" />
-        </form>
+                    onChange={(evt) => setPassword(evt.target.value)}
+                    placeholder="Password" aria-label="Password" />
+                <input type="submit" className="btn submit" value="Submit" />
+            </form>
+        </div>
 
     )
     

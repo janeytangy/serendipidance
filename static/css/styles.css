@@ -1,18 +1,45 @@
 body {
-    background-color: #FCE2DB;
+    background-color: #FAF8F1;
     margin: 0px;
 }
 
-h4 {
+form {
+    border: 2px solid red;
+    border-radius: 5px;
+    margin: 5% auto;
+    padding: 30px;
+    position: absolute;
+}
+
+h4, label, select {
     color: #7F669D;
     font-family: 'Raleway', Arial, sans-serif;
 }
-    
-p {
-    font-family: 'Montserrat Alternates', Arial, sans-serif;
+
+table {
+    font-family: 'Raleway', Arial, sans-serif;
 }
 
+thead {
+    background-color: #BA94D1;
+    color: white;
+}
+
+/* input[type=text], input[type=password] {
+    width: 75%;
+  } */
+
 /******************CLASS SELECTORS******************/
+
+.create, .submit{
+    background-color: #BA94D1;
+    color: white;
+    font-family: 'Raleway', Arial, sans-serif;
+}
+
+.create:hover, .submit:hover {
+    color: #7F669D;
+}
 
 .container-fluid {
     width: 100%;
@@ -20,6 +47,10 @@ p {
     padding-left: 0px;
     margin-right: auto;
     margin-left: auto;
+}
+
+.form-label, .form-control {
+    font-family: 'Raleway', Arial, sans-serif;
 }
 
 .navbar {
@@ -39,9 +70,20 @@ p {
     color: #DEBACE;
 }
 
-.nav-link:hover, .create:hover, .navbar-brand:hover {
+.nav-link:hover, .navbar-brand:hover {
     color: #BA94D1;
     text-decoration: none;
 }
 
 /******************ID SELECTORS******************/
+
+#add-class {
+    border: none;
+    margin: 0;
+    padding: 30px;
+    position: relative;
+}
+
+#all-classes {
+    padding: 3% 10%;
+}
