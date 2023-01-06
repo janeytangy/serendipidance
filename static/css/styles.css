@@ -1,0 +1,47 @@
+body {
+    background-color: #FCE2DB;
+    margin: 0px;
+}
+
+h4 {
+    color: #7F669D;
+    font-family: 'Raleway', Arial, sans-serif;
+}
+    
+p {
+    font-family: 'Montserrat Alternates', Arial, sans-serif;
+}
+
+/******************CLASS SELECTORS******************/
+
+.container-fluid {
+    width: 100%;
+    padding-right: 0px;
+    padding-left: 0px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.navbar {
+    background-color: #7F669D;
+}
+
+.navbar-brand {
+    color: white;
+    font-family: 'Pushster', Arial, sans-serif;
+}
+
+.nav-item {
+    font-family: 'Raleway', Arial, sans-serif;
+}
+
+.nav-link {
+    color: #DEBACE;
+}
+
+.nav-link:hover, .create:hover, .navbar-brand:hover {
+    color: #BA94D1;
+    text-decoration: none;
+}
+
+/******************ID SELECTORS******************/
