@@ -168,6 +168,8 @@ function App() {
           return new Date(a.date) - new Date(b.date)
       });
       setSchedule(classes);
+
+      console.log(classes);
       });
   }
 

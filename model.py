@@ -95,7 +95,8 @@ class UserClass(db.Model):
                 'style': self.class_instance.style,
                 'level': self.class_instance.level,
                 'instructor': self.class_instance.instructor,
-                'studio': self.class_instance.studio}
+                'studio': self.class_instance.studio,
+                'website': self.class_instance.website}
 
 
 

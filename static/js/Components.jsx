@@ -167,7 +167,11 @@ function Schedule(props) {
             <td>{newClass.style}</td>
             <td>{newClass.level}</td>
             <td>{newClass.instructor}</td>
-            <td>{newClass.studio}</td>
+            <td>
+                <a href={`${newClass.website}`} target="_blank" className="studio-website">
+                    {newClass.studio}
+                </a>
+            </td>
             {/* <td>${totalCost.toFixed(2)}</td> */}
             <td>
                     <button
