@@ -1,6 +1,6 @@
 
 function ClassRow(props) {
-    const { id, date, start_time, end_time, price, style, level, instructor, studio, handleAddClass, loggedIn, usertype } = props;
+    const { id, date, start_time, end_time, price, style, level, instructor, studio, website, handleAddClass, loggedIn, usertype } = props;
 
     if (loggedIn && usertype == "student") {
         return (
@@ -28,7 +28,9 @@ function ClassRow(props) {
                         <span className="instructor">{instructor}</span>
                     </td>
                     <td>
+                        <a href={`${website}`} target="_blank" className="studio-website">
                         <span className="studio">{studio}</span>
+                        </a>
                     </td>
                     <td>
                         <button
@@ -69,7 +71,9 @@ function ClassRow(props) {
                         <span className="instructor">{instructor}</span>
                     </td>
                     <td>
+                        <a href={`${website}`} target="_blank" className="studio-website">
                         <span className="studio">{studio}</span>
+                        </a>
                     </td>
                 </tr>
         </React.Fragment>
@@ -94,6 +98,7 @@ function AllClasses(props) {
           level={classinstance.level}
           instructor={classinstance.instructor}
           studio={classinstance.studio}
+          website={classinstance.website}
           handleAddClass={addClassToSchedule}
           loggedIn={loggedIn}
           usertype={usertype}
@@ -108,7 +113,7 @@ function AllClasses(props) {
       <React.Fragment key={classinstances.id}>
         <div id="class-schedule">
             <div id="all-classes">
-            <h4 class="mb-4">Upcoming Classes</h4>
+            <h4 className="classes mb-4">Upcoming Classes</h4>
                 <table className="table table-hover">
                     <thead>
                         <tr>
@@ -120,7 +125,7 @@ function AllClasses(props) {
                             <th scope="col">Level</th>
                             <th scope="col">Instructor</th>
                             <th scope="col">Studio</th>
-                            <th></th>
+                            <th hidden={ usertype !== 'student' ? true : false }></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -134,25 +139,15 @@ function AllClasses(props) {
   }
 
 function Schedule(props) {
-    const { user, schedule, setSchedule, classinstances, removeClassFromSchedule } = props;
+    const { user, schedule, fetchSchedule, removeClassFromSchedule } = props;
     const tableData = [];
 
     // Student Schedule
 
     const onClick = (classinst_id) => {
         removeClassFromSchedule(classinst_id);
+        location.reload();
         fetchSchedule();
-    }
-    const fetchSchedule = () => {
-        fetch(`/api/${user.id}`)
-        .then((response) => response.json())
-        .then((result) => {
-        const classes = Object.values(result);
-        classes.sort(function(a,b){
-            return new Date(a.date) - new Date(b.date)
-        });
-        setSchedule(classes);
-        });
     }
 
     React.useEffect(() => {
@@ -168,22 +163,21 @@ function Schedule(props) {
             <td>{new Date(newClass.date).toUTCString().split(' ').slice(0, 4).join(' ')}</td>
             <td>{new Date(newClass.start_time).toLocaleTimeString("en-US", { timeZone: 'UTC', hour: "2-digit", minute: "2-digit", hour12: true })}</td>
             <td>{new Date(newClass.end_time).toLocaleTimeString("en-US", { timeZone: 'UTC', hour: "2-digit", minute: "2-digit", hour12: true })}</td>
-            <td>{newClass.price}</td>
+            <td>${newClass.price.toFixed(2)}</td>
             <td>{newClass.style}</td>
             <td>{newClass.level}</td>
             <td>{newClass.instructor}</td>
             <td>{newClass.studio}</td>
-            {/* <td>${melonCost.toFixed(2)}</td> */}
+            {/* <td>${totalCost.toFixed(2)}</td> */}
             <td>
                     <button
                         type="button"
                         className="btn btn-sm btn-danger d-inline-block"
-                        onClick={() => onClick(newClass.classinst_id)}
-                    >
+                        onClick={() => onClick(newClass.classinst_id)}>
                         Remove
                     </button>
                 </td>
-        </tr>,
+        </tr>
         );
     }
 
@@ -213,7 +207,7 @@ function Schedule(props) {
 
     const onStudioClick = (classinst_id) => {
         removeStudioClass(classinst_id);
-        // location.reload();
+        location.reload();
         fetchStudioSchedule();
     }
     const fetchStudioSchedule = () => {
@@ -254,17 +248,16 @@ function Schedule(props) {
             <td>{new Date(newStudioClass.date).toUTCString().split(' ').slice(0, 4).join(' ')}</td>
             <td>{new Date(newStudioClass.start_time).toLocaleTimeString("en-US", { timeZone: 'UTC', hour: "2-digit", minute: "2-digit", hour12: true })}</td>
             <td>{new Date(newStudioClass.end_time).toLocaleTimeString("en-US", { timeZone: 'UTC', hour: "2-digit", minute: "2-digit", hour12: true })}</td>
-            <td>{newStudioClass.price}</td>
+            <td>${newStudioClass.price.toFixed(2)}</td>
             <td>{newStudioClass.style}</td>
             <td>{newStudioClass.level}</td>
             <td>{newStudioClass.instructor}</td>
-            {/* <td>${melonCost.toFixed(2)}</td> */}
+            {/* <td>${totalCost.toFixed(2)}</td> */}
             <td>
                     <button
                         type="button"
                         className="btn btn-sm btn-danger d-inline-block"
-                        onClick={() => onStudioClick(newStudioClass.classinst_id)}
-                    >
+                        onClick={() => onStudioClick(newStudioClass.classinst_id)}>
                         Remove
                     </button>
                 </td>
@@ -295,7 +288,8 @@ function Schedule(props) {
                 style: style, 
                 level: level, 
                 instructor: instructor, 
-                sname: user.sname
+                sname: user.sname,
+                website: user.website
             }),
             
         });
@@ -304,9 +298,9 @@ function Schedule(props) {
     if (user.usertype === "student"){
         return (
             <React.Fragment>
-                <h3>Hi, {user.fname}</h3>
-                <h1>Schedule</h1>
                 <div id="student">
+                    <h3 className="classes">Hi, {user.fname}!</h3>
+                    <h4 className="classes">Your Schedule</h4>
                     <table className="table table-hover">
                     <thead>
                         <tr>
@@ -331,10 +325,9 @@ function Schedule(props) {
         return (
             <React.Fragment>
             <div>
-                <form id="add-class" onSubmit={addClassInstanceToSchedule}>
-                    <h3>{user.sname}</h3>
-                    <h1>Schedule</h1>
-                    <div>
+                <form id="add-class" className="col-sm-7 col-md-6 col-lg-5" onSubmit={addClassInstanceToSchedule}>
+                    <h3 className="mb-4">{user.sname}</h3>
+                    <div className="mb-3">
                         <label>
                             Please select the type of class you'd like to submit:
                             <select 
@@ -350,10 +343,13 @@ function Schedule(props) {
                                 ))}
                             </select>
                         </label>
+                    </div>
+                    <div className="mb-2">
                         <label hidden={ classtype !== 'One-Time' ? true : false }>
                             Date:
                             <input type="date" min={today} 
                                     id="date"
+                                    className="form-control"
                                     name="date" 
                                     hidden={ classtype !== 'One-Time' ? true : false } 
                                     required={ classtype === 'One-Time' ? true : false }
@@ -362,7 +358,8 @@ function Schedule(props) {
                         <label hidden={ classtype !== 'Weekly' ? true : false }>
                             Start Date:
                             <input type="date" min={today} 
-                                    id="start_date" 
+                                    id="start_date"
+                                    className="form-control" 
                                     name="start_date" 
                                     hidden={ classtype !== 'Weekly' ? true : false } 
                                     required={ classtype === 'Weekly' ? true : false }
@@ -371,18 +368,20 @@ function Schedule(props) {
                         <label hidden={ classtype !== 'Weekly' ? true : false }>
                             End Date:
                             <input type="date" min={today} 
-                                    id="end_date" 
+                                    id="end_date"
+                                    className="form-control" 
                                     name="end_date" 
                                     hidden={ classtype !== 'Weekly' ? true : false } 
                                     required={ classtype === 'Weekly' ? true : false }
                                     onChange={(evt) => setEndDate(evt.target.value)} />
                         </label>
                     </div>
-                    <div>
+                    <div className="mb-2">
                         <label>
                             Start Time:
                             <input type="time"
                                     id="start_time"
+                                    className="form-control"
                                     value={startTime}
                                     required={true}
                                     onChange={(evt) => setStartTime(evt.target.value)} />
@@ -391,6 +390,7 @@ function Schedule(props) {
                             End Time:
                             <input type="time"
                                     id="end_time"
+                                    className="form-control"
                                     value={endTime}
                                     required={true}
                                     onChange={(evt) => setEndTime(evt.target.value)} />
@@ -399,14 +399,18 @@ function Schedule(props) {
                             Price: $
                             <input type="number" min="1" step="1" placeholder="0.00"
                                     id="price"
+                                    className="form-control"
                                     value={price}
                                     required={true}
                                     onChange={(evt) => setPrice(evt.target.value)} />
                         </label>
+                    </div>
+                    <div className="mb-2">
                         <label>
                             Style:
                             <select 
-                                id="style" 
+                                id="style"
+                                className="form-control" 
                                 value={style} 
                                 required={true} 
                                 onChange={(evt) => setStyle(evt.target.value)}
@@ -421,7 +425,8 @@ function Schedule(props) {
                         <label>
                             Level:
                             <select 
-                                id="level" 
+                                id="level"
+                                className="form-control" 
                                 value={level} 
                                 required={true} 
                                 onChange={(evt) => setLevel(evt.target.value)}
@@ -436,13 +441,16 @@ function Schedule(props) {
                         <label>
                             Instructor:
                             <input type="text"
-                            id="instructor" 
+                            id="instructor"
+                            className="form-control" 
                             value={instructor} 
                             required={true} 
                             onChange={(evt) => setInstructor(evt.target.value)}
                             />
                         </label>
-                        <input type="submit" value="Submit" />
+                    </div>
+                    <div>
+                        <input type="submit" className="btn submit" value="Submit" />
                     </div>
                 </form>
             </div>
@@ -477,16 +485,16 @@ function Navbar({loggedIn, handleLogOut}) {
   if (loggedIn){
     return (
         <React.Fragment>
-        <nav class="navbar navbar-expand-lg">
-            <div class="container-fluid">
+        <nav className="navbar navbar-expand-lg">
+            <div className="container-fluid">
                 <ReactRouterDOM.NavLink
                         to="/"
                         className="navbar-brand">
                         serendipidance
                 </ReactRouterDOM.NavLink>
                 <div>
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
+                <ul className="navbar-nav ms-auto">
+                    <li className="nav-item">
                         <ReactRouterDOM.NavLink
                         to="/"
                         activeClassName="navlink-active"
@@ -495,7 +503,7 @@ function Navbar({loggedIn, handleLogOut}) {
                         Home
                         </ReactRouterDOM.NavLink>
                     </li>
-                    <li class="nav-item">
+                    <li className="nav-item">
                         <ReactRouterDOM.NavLink
                         to="/schedule"
                         activeClassName="navlink-active"
@@ -504,7 +512,7 @@ function Navbar({loggedIn, handleLogOut}) {
                         Schedule
                         </ReactRouterDOM.NavLink>
                     </li>
-                    <li class="nav-item">
+                    <li className="nav-item">
                         <ReactRouterDOM.NavLink
                         to="/"
                         onClick={handleLogOut}
@@ -524,16 +532,16 @@ function Navbar({loggedIn, handleLogOut}) {
 
     return (
         <React.Fragment>
-        <nav class="navbar sticky-top navbar-expand-lg">
-            <div class="container-fluid">
+        <nav className="navbar sticky-top navbar-expand-lg">
+            <div className="container-fluid">
                 <ReactRouterDOM.NavLink
                         to="/"
                         className="navbar-brand">
                         serendipidance
                 </ReactRouterDOM.NavLink>
                 <div>
-                    <ul class="navbar-nav">
-                        <li class="nav-item">
+                    <ul className="navbar-nav">
+                        <li className="nav-item">
                             <ReactRouterDOM.NavLink
                             to="/"
                             activeClassName="navlink-active"
@@ -541,7 +549,7 @@ function Navbar({loggedIn, handleLogOut}) {
                             Home
                             </ReactRouterDOM.NavLink>
                         </li>
-                        <li class="nav-item">
+                        <li className="nav-item">
                             <ReactRouterDOM.NavLink
                             to="/login"
                             activeClassName="navlink-active"
@@ -569,28 +577,28 @@ function Login({handleLogin, setEmail, setPassword}) {
 
     return (
         <div>
-            <form class="col-sm-5 col-md-4 col-lg-3" onSubmit={handleLogin}>
-                <h4 class="mb-3">
+            <form className="col-sm-5 col-md-4 col-lg-3" onSubmit={handleLogin}>
+                <h4 className="mb-3">
                     Login
                 </h4>
-                <div class="mb-2">
+                <div className="mb-2">
                     <input type="text"
-                            class="form-control mb-2" 
+                            className="form-control mb-2" 
                             id="email" 
                             name="email" 
                             onChange={setEmail}
                             placeholder="Email" aria-label="Email" />
 
                     <input type={values.showPassword ? "text" : "password"} 
-                            class="form-control mb-2"
+                            className="form-control mb-2"
                             id="password" 
                             name="password" 
                             onChange={setPassword}
                             placeholder="Password" aria-label="Password" />
                 </div>
-                <div class="container-fluid">
-                    <input type="submit" class="btn submit" value="Submit" />
-                    <ReactRouterDOM.Link to='/create' className="btn create">Create A New Account</ReactRouterDOM.Link>
+                <div className="container-fluid">
+                    <input type="submit" className="btn submit mb-2" value="Submit" />
+                    <ReactRouterDOM.Link to='/create' className="btn create mb-2">Create A New Account</ReactRouterDOM.Link>
                 </div>
             </form>
         </div>
@@ -647,15 +655,14 @@ function CreateAccount(props) {
 
     return (
         <div>
-            <form class="col-sm-5 col-md-4 col-lg-3" onSubmit={handleSubmit}>
-                <h4 class="mb-3">
+            <form className="col-sm-5 col-md-4 col-lg-3" onSubmit={handleSubmit}>
+                <h4 className="mb-3">
                     Create Account
                 </h4>
                 <label>
                     Account Type:
                     <select 
                         id="usertypes"
-                        class="mb-2" 
                         value={usertype} 
                         required={true} 
                         onChange={(evt) => setUsertype(evt.target.value)}>
@@ -668,7 +675,7 @@ function CreateAccount(props) {
                 </label>
                 <input type="text"  
                     id="fname" 
-                    class="form-control mb-2"
+                    className="form-control mb-2"
                     name="fname" 
                     hidden={ usertype !== 'student' ? true : false } 
                     required={ usertype === 'student' ? true : false } 
@@ -676,7 +683,7 @@ function CreateAccount(props) {
                     placeholder="First Name" aria-label="First Name" />
                 <input type="text" 
                     id="lname" 
-                    class="form-control mb-2"
+                    className="form-control mb-2"
                     name="lname" 
                     hidden={ usertype !== 'student' ? true : false } 
                     required={ usertype === 'student' ? true : false } 
@@ -684,7 +691,7 @@ function CreateAccount(props) {
                     placeholder="Last Name" aria-label="Last Name"  />
                 <input type="text" 
                     id="sname" 
-                    class="form-control mb-2"
+                    className="form-control mb-2"
                     name="sname" 
                     hidden={ usertype !== 'studio' ? true : false } 
                     required={ usertype === 'studio' ? true : false } 
@@ -692,7 +699,7 @@ function CreateAccount(props) {
                     placeholder="Studio Name" aria-label="Studio Name"  />
                 <input type="text"
                     id="website"
-                    class="form-control mb-2"
+                    className="form-control mb-2"
                     name="website" 
                     hidden={ usertype !== 'studio' ? true : false } 
                     required={ usertype === 'studio' ? true : false } 
@@ -700,14 +707,14 @@ function CreateAccount(props) {
                     placeholder="Studio Website" aria-label="Studio Website"  />
                 <input type="text" 
                     id="email" 
-                    class="form-control mb-2"
+                    className="form-control mb-2"
                     name="email" 
                     required={true} 
                     onChange={(evt) => setEmail(evt.target.value)}
                     placeholder="Email" aria-label="Email" />
                 <input type={values.showPassword ? "text" : "password"} 
                     id="password" 
-                    class="form-control mb-2"
+                    className="form-control mb-2"
                     name="password" 
                     required={true} 
                     onChange={(evt) => setPassword(evt.target.value)}

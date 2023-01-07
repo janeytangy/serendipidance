@@ -2,8 +2,7 @@
 
 from model import (db,
     User, UserClass,
-    # UserType,
-    ClassEvent, ClassInstance, 
+    ClassInstance, 
     connect_to_db)
 
 import datetime
@@ -15,11 +14,6 @@ def create_user(fname, lname, email, password, usertype, sname, website):
     """Create and return a new user."""
 
     return User(fname=fname, lname=lname, email=email, password=password, usertype=usertype, sname=sname, website=website)
-
-# def get_users():
-#     """Returns all users"""
-
-#     return User.query.all()
     
 def get_user_by_id(user_id):
     """Return user info by id"""
@@ -41,26 +35,14 @@ def get_classinstances_by_studio_id(user_id):
 
 # CLASS EVENT-RELATED
 
-def create_classevent(start_date, end_date, start_time, end_time, price, style, level, instructor, studio, timedelta, user_id):
+def create_classevent(start_date, end_date, start_time, end_time, price, style, level, instructor, studio, website, timedelta):
     """Create and return a new class event."""
-
-    # class_event = ClassEvent(
-    #                 start_date=start_date, 
-    #                 end_date=end_date,
-    #                 start_time=start_time, 
-    #                 end_time=end_time,
-    #                 price=price,
-    #                 style=style,
-    #                 level=level,
-    #                 instructor=instructor, 
-    #                 user_id=user_id           
-    #             )
 
     new_classes = []
 
     while True:
         date = start_date
-        new_classes.append(create_classinstance(date, start_time, end_time, price, style, level, instructor, studio))
+        new_classes.append(create_classinstance(date, start_time, end_time, price, style, level, instructor, studio, website))
         new_date = start_date + timedelta
         start_date = new_date
         if start_date > end_date:
@@ -68,15 +50,10 @@ def create_classevent(start_date, end_date, start_time, end_time, price, style, 
 
     return new_classes
 
-def get_classevent():
-    """Returns all class events"""
-
-    return ClassEvent.query.all()
-
 
 # CLASS INSTANCE-RELATED
 
-def create_classinstance(date, start_time, end_time, price, style, level, instructor, studio):
+def create_classinstance(date, start_time, end_time, price, style, level, instructor, studio, website):
     """Create and return a new class instance."""
 
     return ClassInstance(
@@ -87,7 +64,8 @@ def create_classinstance(date, start_time, end_time, price, style, level, instru
         style=style,
         level=level,
         instructor=instructor, 
-        studio=studio          
+        studio=studio,
+        website=website          
     )
 
 def get_classinstances():
@@ -108,14 +86,6 @@ def get_class_instances_by_studio(user_id):
     studio_name = q.sname
 
     return ClassInstance.query.filter(ClassInstance.studio==studio_name).all()
-
-
-# USERTYPE-RELATED
-
-# def create_usertype(type_name):
-#     """Create usertypes"""
-
-#     return UserType(type_name=type_name)
 
 
 # USERCLASS-RELATED

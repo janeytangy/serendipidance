@@ -42,7 +42,8 @@ def login():
                 "email": user.email,
                 "password": user.password,
                 "usertype": user.usertype,
-                "sname": user.sname
+                "sname": user.sname,
+                "website": user.website
             })
 
         else:
@@ -93,12 +94,6 @@ def get_class_instances():
 
     return jsonify({classinstance.classinst_id: classinstance.to_dict() for classinstance in classinstances})
 
-# @app.route('/api/users')
-# def get_users():
-#     users = User.query.all()
-#     return jsonify({user.user_id: user.to_dict() for user in users})
-
-
 
 # SCHEDULE - Student Usertype
 
@@ -144,7 +139,6 @@ def remove_class(user_id, class_id):
 def add_classinstance_to_schedule(user_id):
     """Create new class instance"""
     
-    # date = datetime.datetime.strptime(request.json.get('date'), "%Y-%m-%d")
     start_date = datetime.datetime.strptime(request.json.get('start_date'), "%Y-%m-%d")
     end_date = datetime.datetime.strptime(request.json.get('end_date'), "%Y-%m-%d")
     start_time = datetime.datetime.strptime(request.json.get('start_time') + ' PST', "%H:%M %Z")
@@ -154,9 +148,10 @@ def add_classinstance_to_schedule(user_id):
     level = request.json.get('level')
     instructor = request.json.get('instructor')
     sname = request.json.get('sname')
+    website = request.json.get('website')
     timedelta = datetime.timedelta(days=7)
 
-    new_classes = crud.create_classevent(start_date, end_date, start_time, end_time, price, style, level, instructor, sname, timedelta, user_id)
+    new_classes = crud.create_classevent(start_date, end_date, start_time, end_time, price, style, level, instructor, sname, website, timedelta)
 
     db.session.add_all(new_classes)
     db.session.commit()

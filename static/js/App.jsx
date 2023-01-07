@@ -1,6 +1,5 @@
 function App() {
     const [classinstances, setClass] = React.useState({});
-    // const [users, setUsers] = React.useState({});
     const [schedule, setSchedule] = React.useState({});
 
     const [user, setUser] = React.useState({id: Number(localStorage.getItem("userId")),
@@ -9,7 +8,8 @@ function App() {
                                             email: localStorage.getItem("userEmail"),
                                             password: localStorage.getItem("userPassword"),
                                             usertype: localStorage.getItem("userType"),
-                                            sname: localStorage.getItem("userSName")});
+                                            sname: localStorage.getItem("userSName"),
+                                            website: localStorage.getItem("userWebsite")});
 
     const [loggedIn, setLoggedIn] = React.useState(JSON.parse(localStorage.getItem("isLoggedIn")));
     
@@ -27,15 +27,6 @@ function App() {
           setClass(classes);
         });
     }, []);
-
-    // React.useEffect(() => {
-    //     fetch("/api/users")
-    //     .then((response) => response.json())
-    //     .then((userData) => {
-    //       setUsers(userData);
-    //     });
-    // }, []);
-
 
     // Login & Logout
     let handleLogin = async (evt) => {
@@ -73,7 +64,8 @@ function App() {
                                         email: result.email,
                                         password: result.password,
                                         usertype: result.usertype,
-                                        sname: result.sname
+                                        sname: result.sname,
+                                        website: result.website
             }));
             setLoggedIn(true);
             localStorage.setItem("isLoggedIn", true);
@@ -91,6 +83,7 @@ function App() {
         localStorage.setItem("userPassword", user.password);
         localStorage.setItem("userType", user.usertype);
         localStorage.setItem("userSName", user.sname);
+        localStorage.setItem("userWebsite", user.website);
     }
 
     Promise.all([handleLogin, setSession()]);
@@ -106,7 +99,8 @@ function App() {
                 email:"",
                 password:"",
                 usertype:"",
-                sname:""});
+                sname:"",
+                website:""});
         
         let removeUser = await fetch("/logout", {
             method: "POST",
@@ -165,6 +159,18 @@ function App() {
         });
     }
 
+    const fetchSchedule = () => {
+      fetch(`/api/${user.id}`)
+      .then((response) => response.json())
+      .then((result) => {
+      const classes = Object.values(result);
+      classes.sort(function(a,b){
+          return new Date(a.date) - new Date(b.date)
+      });
+      setSchedule(classes);
+      });
+  }
+
   
     return (
       <ReactRouterDOM.BrowserRouter>
@@ -178,10 +184,6 @@ function App() {
                 loggedIn={loggedIn}
                 usertype={user.usertype} />
           </ReactRouterDOM.Route>
-
-          {/* <ReactRouterDOM.Route exact path="/all-users">
-            <AllUsers users={users} />
-          </ReactRouterDOM.Route> */}
 
           <ReactRouterDOM.Route exact path="/login">
           {loggedIn ? <ReactRouterDOM.Redirect to='/schedule' />:
@@ -197,8 +199,8 @@ function App() {
           <ReactRouterDOM.Route exact path="/schedule">
             {loggedIn ? <Schedule user={user}
                 schedule={schedule}
-                setSchedule={setSchedule}
-                classinstances={classinstances} 
+                fetchSchedule={fetchSchedule}
+                setSchedule={setSchedule} 
                 removeClassFromSchedule={removeClassFromSchedule} />:
             <ReactRouterDOM.Redirect to='/' />}
           </ReactRouterDOM.Route>

@@ -30,20 +30,21 @@ studios_in_file = []
 for dance in danceclass_data:
 
     # read data
-    price, style, level, instructor, studio = (dance["price"],
+    price, style, level, instructor, studio, website = (dance["price"],
         dance["style"],
         dance["level"],
         dance["instructor"],
-        dance["studio"])
+        dance["studio"],
+        dance["website"])
 
-    studios_in_file.append((dance["studio"], dance["website"]))
+    studios_in_file.append((studio, website))
 
     date = datetime.datetime.strptime(dance["date"], "%Y-%m-%d")
     start_time = datetime.datetime.strptime(dance["start_time"], "%H:%M %Z")
     end_time = datetime.datetime.strptime(dance["end_time"], "%H:%M %Z")
 
     danceclass_in_db.append(crud.create_classinstance(date, 
-            start_time, end_time, price, style, level, instructor, studio))
+            start_time, end_time, price, style, level, instructor, studio, website))
 
 
 model.db.session.add_all(danceclass_in_db)
