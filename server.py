@@ -2,7 +2,7 @@
 
 from flask import (Flask, render_template, request, flash, session,
                    redirect, jsonify)
-from model import User, connect_to_db, db
+from model import connect_to_db, db
 import crud
 import datetime
 
@@ -125,7 +125,7 @@ def get_schedule_by_user_id(user_id):
 def remove_class(user_id, class_id):
     """Remove class for student user"""
 
-    userclass = crud.get_userclass(user_id, class_id)
+    userclass = crud.get_userclass_by_user_id(user_id, class_id)
 
     db.session.delete(userclass)
     db.session.commit()
@@ -170,6 +170,10 @@ def remove_studio_class(user_id, class_id):
     """Remove class for studio user"""
 
     classinstance = crud.get_class_instance_by_id(class_id)
+    userclasses = crud.get_userclasses_by_class_id(class_id)
+
+    for userclass in userclasses:
+        db.session.delete(userclass)
 
     db.session.delete(classinstance)
     db.session.commit()

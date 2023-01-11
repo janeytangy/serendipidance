@@ -111,10 +111,15 @@ def check_classinstance(user_id, class_id):
     else:
         return False
 
-def get_userclass(user_id, class_id):
+def get_userclass_by_user_id(user_id, class_id):
     """Retrieve userclass by user and class ids"""
 
     return UserClass.query.filter(UserClass.user_id==user_id, UserClass.classinst_id==class_id).first()
+
+def get_userclasses_by_class_id(class_id):
+    """Retrieve all userclasses with a specific class_id"""
+
+    return UserClass.query.filter(UserClass.classinst_id==class_id).all()
         
 
 if __name__ == '__main__':

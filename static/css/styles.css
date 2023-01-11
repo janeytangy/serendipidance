@@ -80,7 +80,12 @@ form {
     position: absolute;
 }
 
-h3, h4, label, select {
+h2 {
+    color: white;
+    font-family: 'Pushster', Arial, sans-serif;
+}
+
+h3, h4, h6, label, select {
     color: #7F669D;
     font-family: 'Raleway', Arial, sans-serif;
 }
@@ -103,24 +108,20 @@ thead {
     color: white;
 }
 
-/* input[type=text], input[type=password] {
-    width: 75%;
-  } */
-
 /******************CLASS SELECTORS******************/
 
 .classes {
     color: white;
 }
 
-.create, .submit{
+.create-login, .submit{
     background-color: #BA94D1;
     color: white;
     font-family: 'Raleway', Arial, sans-serif;
     margin-right: 10px;
 }
 
-.create:hover, .submit:hover {
+.create-login:hover, .submit:hover {
     color: #7F669D;
 }
 
@@ -167,6 +168,10 @@ a:hover, .nav-link:hover, .navbar-brand:hover {
     position: relative;
 }
 
-#all-classes, #student, #studio {
+#all-classes, #student, #studio, #prevstudio {
     padding: 3% 10%;
+}
+
+#intro {
+    text-align: center;
 }

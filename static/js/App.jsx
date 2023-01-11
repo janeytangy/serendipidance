@@ -14,7 +14,6 @@ function App() {
     const [loggedIn, setLoggedIn] = React.useState(JSON.parse(localStorage.getItem("isLoggedIn")));
     
 
-
     // Fetch all class instances from rest API
     React.useEffect(() => {
       fetch("/api/classinstances")
@@ -24,7 +23,9 @@ function App() {
           classes.sort(function(a,b){
             return new Date(a.date) - new Date(b.date)
           });
-          setClass(classes);
+          const current = new Date();
+          const filteredClasses = classes.filter(c => new Date(c.date) - current > 0);
+          setClass(filteredClasses);
         });
     }, []);
 
@@ -168,8 +169,6 @@ function App() {
           return new Date(a.date) - new Date(b.date)
       });
       setSchedule(classes);
-
-      console.log(classes);
       });
   }
 
@@ -184,7 +183,9 @@ function App() {
             <AllClasses classinstances={classinstances} 
                 addClassToSchedule={addClassToSchedule} 
                 loggedIn={loggedIn}
-                usertype={user.usertype} />
+                usertype={user.usertype}
+                schedule={schedule}
+                fetchSchedule={fetchSchedule} />
           </ReactRouterDOM.Route>
 
           <ReactRouterDOM.Route exact path="/login">

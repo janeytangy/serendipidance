@@ -1,6 +1,23 @@
 
 function ClassRow(props) {
-    const { id, date, start_time, end_time, price, style, level, instructor, studio, website, handleAddClass, loggedIn, usertype } = props;
+    const { id, date, start_time, end_time, price, style, level, instructor, studio, website, handleAddClass, loggedIn, usertype, schedule, fetchSchedule } = props;
+    const [registered, setRegistered] = React.useState("");
+
+    React.useEffect(() => {
+        fetchSchedule();
+        checkRegistered();
+    }, []);
+
+    const checkRegistered = () => {
+        for (const classinst_id in schedule) {
+
+            const registration = schedule[Number(classinst_id)];
+    
+            if (registration["classinst_id"] === id) {
+                setRegistered(true);
+            }    
+        }
+    }
 
     if (loggedIn && usertype == "student") {
         return (
@@ -32,14 +49,16 @@ function ClassRow(props) {
                         <span className="studio">{studio}</span>
                         </a>
                     </td>
-                    <td>
+                    <td name="add-to-schedule">
                         <button
                             type="button"
                             name="add-to-schedule"
-                            className="btn btn-sm btn-success d-inline-block"
+                            className={ registered ? "btn btn-sm btn-warning d-inline-block" : 
+                                                    "btn btn-sm btn-success d-inline-block" }
+                            disabled={ registered ? true : false }
                             onClick={() => handleAddClass(id)}
-                        >
-                            Add to Schedule
+                            >
+                            Add
                         </button>
                     </td>
                 </tr>
@@ -82,7 +101,7 @@ function ClassRow(props) {
   }
 
 function AllClasses(props) {
-    const { classinstances, addClassToSchedule, loggedIn, usertype } = props;
+    const { classinstances, addClassToSchedule, loggedIn, usertype, schedule, fetchSchedule } = props;
     const classRows = [];
   
     for (const classinstance of Object.values(classinstances)) {
@@ -102,6 +121,8 @@ function AllClasses(props) {
           handleAddClass={addClassToSchedule}
           loggedIn={loggedIn}
           usertype={usertype}
+          schedule={schedule}
+          fetchSchedule={fetchSchedule}
         />
       );
         
@@ -113,6 +134,12 @@ function AllClasses(props) {
       <React.Fragment key={classinstances.id}>
         <div id="class-schedule">
             <div id="all-classes">
+                <div id="intro">
+                    <h2>serendipidance</h2>
+                    <h6 className="classes mb-4"><em>noun /ˌserənˈdipə dance/</em>
+                    <br />discovering fun dance classes by chance</h6>
+                    <h6 className="classes mb-4" hidden={ loggedIn ? true : false }>login to start scheduling!</h6>
+                </div>
             <h4 className="classes mb-4">Upcoming Classes</h4>
                 <table className="table table-hover">
                     <thead>
@@ -144,6 +171,8 @@ function Schedule(props) {
 
     // Student Schedule
 
+    let totalCost = 0;
+
     const onClick = (classinst_id) => {
         removeClassFromSchedule(classinst_id);
         location.reload();
@@ -157,6 +186,8 @@ function Schedule(props) {
     for (const classinst_id in schedule) {
 
         const newClass = schedule[Number(classinst_id)];
+
+        totalCost += newClass.price;
 
         tableData.push(
         <tr key={classinst_id}>
@@ -172,7 +203,6 @@ function Schedule(props) {
                     {newClass.studio}
                 </a>
             </td>
-            {/* <td>${totalCost.toFixed(2)}</td> */}
             <td>
                     <button
                         type="button"
@@ -197,6 +227,7 @@ function Schedule(props) {
     const [level, setLevel] = React.useState("");
     const [instructor, setInstructor] = React.useState("");
     const [studioSchedule, setStudioSchedule] = React.useState("");
+    const [prevStudioSchedule, setPrevStudioSchedule] = React.useState("");
 
     const current = new Date();
     const today = `${current.getFullYear()}-${current.getMonth()+1}-${current.getDate()}`
@@ -208,6 +239,7 @@ function Schedule(props) {
                             "MASTER", "ALL"];
     
     const studioData = [];
+    const prevStudioData = [];
 
     const onStudioClick = (classinst_id) => {
         removeStudioClass(classinst_id);
@@ -222,7 +254,11 @@ function Schedule(props) {
           classes.sort(function(a,b){
             return new Date(a.date) - new Date(b.date)
           });
-          setStudioSchedule(classes);
+          const current = new Date();
+          const filteredClasses = classes.filter(c => new Date(c.date) - current >= 0);
+          const prevClasses = classes.filter(c => new Date(c.date) - current < 0);
+          setStudioSchedule(filteredClasses);
+          setPrevStudioSchedule(prevClasses);
         });
     }
     function removeStudioClass(classId) {
@@ -256,7 +292,31 @@ function Schedule(props) {
             <td>{newStudioClass.style}</td>
             <td>{newStudioClass.level}</td>
             <td>{newStudioClass.instructor}</td>
-            {/* <td>${totalCost.toFixed(2)}</td> */}
+            <td>
+                    <button
+                        type="button"
+                        className="btn btn-sm btn-danger d-inline-block"
+                        onClick={() => onStudioClick(newStudioClass.classinst_id)}>
+                        Remove
+                    </button>
+                </td>
+        </tr>
+        );
+    }
+
+    for (const classinst_id in prevStudioSchedule) {
+
+        const newStudioClass = prevStudioSchedule[Number(classinst_id)];
+
+        prevStudioData.push(
+        <tr key={classinst_id}>
+            <td>{new Date(newStudioClass.date).toUTCString().split(' ').slice(0, 4).join(' ')}</td>
+            <td>{new Date(newStudioClass.start_time).toLocaleTimeString("en-US", { timeZone: 'UTC', hour: "2-digit", minute: "2-digit", hour12: true })}</td>
+            <td>{new Date(newStudioClass.end_time).toLocaleTimeString("en-US", { timeZone: 'UTC', hour: "2-digit", minute: "2-digit", hour12: true })}</td>
+            <td>${newStudioClass.price.toFixed(2)}</td>
+            <td>{newStudioClass.style}</td>
+            <td>{newStudioClass.level}</td>
+            <td>{newStudioClass.instructor}</td>
             <td>
                     <button
                         type="button"
@@ -321,7 +381,9 @@ function Schedule(props) {
                     </thead>
                     <tbody>{tableData}</tbody>
                     </table>
-                    {/* <p className="lead">Total: ${totalCost.toFixed(2)}</p> */}
+                    <div>
+                        <h4 className="classes" align="right">Total: ${totalCost.toFixed(2)}</h4>
+                    </div>
                 </div>
             </React.Fragment>
         );
@@ -400,7 +462,7 @@ function Schedule(props) {
                                     onChange={(evt) => setEndTime(evt.target.value)} />
                         </label>
                         <label>
-                            Price: $
+                            Price per Student ($USD):
                             <input type="number" min="1" step="1" placeholder="0.00"
                                     id="price"
                                     className="form-control"
@@ -477,6 +539,25 @@ function Schedule(props) {
                 </tbody>
                 </table>
             </div>
+            <div id="prevstudio">
+                <table className="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Start Time</th>
+                        <th>End Time</th>
+                        <th>Price</th>
+                        <th>Style</th>
+                        <th>Level</th>
+                        <th>Instructor</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {prevStudioData}
+                </tbody>
+                </table>
+            </div>
             </React.Fragment>
         );
     }
@@ -489,7 +570,7 @@ function Navbar({loggedIn, handleLogOut}) {
   if (loggedIn){
     return (
         <React.Fragment>
-        <nav className="navbar navbar-expand-lg">
+        <nav className="navbar navbar-expand-lg navbar-fixed-top">
             <div className="container-fluid">
                 <ReactRouterDOM.NavLink
                         to="/"
@@ -511,6 +592,10 @@ function Navbar({loggedIn, handleLogOut}) {
                         <ReactRouterDOM.NavLink
                         to="/schedule"
                         activeClassName="navlink-active"
+                        activeStyle={{
+                            fontWeight: "bold",
+                            color: "white"
+                          }}
                         className="nav-link"
                         >
                         Schedule
@@ -520,7 +605,6 @@ function Navbar({loggedIn, handleLogOut}) {
                         <ReactRouterDOM.NavLink
                         to="/"
                         onClick={handleLogOut}
-                        activeClassName="navlink-active"
                         className="nav-link"
                         >
                         Log Out
@@ -536,7 +620,7 @@ function Navbar({loggedIn, handleLogOut}) {
 
     return (
         <React.Fragment>
-        <nav className="navbar sticky-top navbar-expand-lg">
+        <nav className="navbar navbar-expand-lg">
             <div className="container-fluid">
                 <ReactRouterDOM.NavLink
                         to="/"
@@ -557,6 +641,10 @@ function Navbar({loggedIn, handleLogOut}) {
                             <ReactRouterDOM.NavLink
                             to="/login"
                             activeClassName="navlink-active"
+                            activeStyle={{
+                                fontWeight: "bold",
+                                color: "white"
+                              }}
                             className="nav-link">
                             Sign Up / Login
                             </ReactRouterDOM.NavLink>
@@ -602,7 +690,7 @@ function Login({handleLogin, setEmail, setPassword}) {
                 </div>
                 <div className="container-fluid">
                     <input type="submit" className="btn submit mb-2" value="Submit" />
-                    <ReactRouterDOM.Link to='/create' className="btn create mb-2">Create A New Account</ReactRouterDOM.Link>
+                    <ReactRouterDOM.Link to='/create' className="btn create-login mb-2">Create A New Account</ReactRouterDOM.Link>
                 </div>
             </form>
         </div>
@@ -723,10 +811,20 @@ function CreateAccount(props) {
                     required={true} 
                     onChange={(evt) => setPassword(evt.target.value)}
                     placeholder="Password" aria-label="Password" />
-                <input type="submit" className="btn submit" value="Submit" />
+                <input type="submit" className="btn submit mb-2" value="Submit" />
+                <ReactRouterDOM.Link to='/login' className="btn create-login mb-2">Login</ReactRouterDOM.Link>
             </form>
         </div>
 
     )
     
 }
+
+function Loading() {
+    return (
+      <div className="loading-box">
+        <img src="https://media.tenor.com/Hl4217cjhJAAAAAC/dance-bunny.gif" alt="" />
+        <div>Loading...</div>
+      </div>
+    );
+  }
