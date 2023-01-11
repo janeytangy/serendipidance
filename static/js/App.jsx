@@ -141,10 +141,6 @@ function App() {
                 class_id: classId
             }),
         });
-
-        if (addClass.status===401){
-            alert(addClass.statusText);
-        }
     }
 
     function removeClassFromSchedule(classId) {
@@ -160,22 +156,6 @@ function App() {
             }),
         });
     }
-    
-    const fetchSchedule = () => {
-      fetch(`/api/${user.id}`)
-      .then((response) => response.json())
-      .then((result) => {
-      const classes = Object.values(result);
-      classes.sort(function(a,b){
-          return new Date(a.date) - new Date(b.date)
-      });
-      const current = new Date();
-      const filteredClasses = classes.filter(c => new Date(c.date) - current >= 0);
-      const prevClasses = classes.filter(c => new Date(c.date) - current < 0);
-      setSchedule(filteredClasses);
-      setPrevSchedule(prevClasses);
-      });
-    }
 
   
     return (
@@ -190,7 +170,8 @@ function App() {
                 loggedIn={loggedIn}
                 usertype={user.usertype}
                 schedule={schedule}
-                fetchSchedule={fetchSchedule} />
+                setSchedule={setSchedule}
+                />
           </ReactRouterDOM.Route>
 
           <ReactRouterDOM.Route exact path="/login">
@@ -207,7 +188,6 @@ function App() {
           <ReactRouterDOM.Route exact path="/schedule">
             {loggedIn ? <Schedule user={user}
                 schedule={schedule}
-                fetchSchedule={fetchSchedule}
                 setSchedule={setSchedule} 
                 removeClassFromSchedule={removeClassFromSchedule} />:
             <ReactRouterDOM.Redirect to='/' />}

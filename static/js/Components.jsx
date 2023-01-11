@@ -1,10 +1,10 @@
 
 function ClassRow(props) {
-    const { id, date, start_time, end_time, price, style, level, instructor, studio, website, handleAddClass, loggedIn, usertype, schedule, fetchSchedule } = props;
+    const { id, date, start_time, end_time, price, style, level, instructor, studio, website, handleAddClass, loggedIn, usertype, schedule } = props;
     const [registered, setRegistered] = React.useState("");
 
     React.useEffect(() => {
-        fetchSchedule();
+        // fetchSchedule();
         checkRegistered();
     }, []);
 
@@ -101,7 +101,7 @@ function ClassRow(props) {
   }
 
 function AllClasses(props) {
-    const { classinstances, addClassToSchedule, loggedIn, usertype, schedule, fetchSchedule } = props;
+    const { classinstances, addClassToSchedule, loggedIn, usertype, schedule } = props;
     const classRows = [];
   
     for (const classinstance of Object.values(classinstances)) {
@@ -122,7 +122,6 @@ function AllClasses(props) {
           loggedIn={loggedIn}
           usertype={usertype}
           schedule={schedule}
-          fetchSchedule={fetchSchedule}
         />
       );
         
@@ -166,7 +165,7 @@ function AllClasses(props) {
   }
 
 function Schedule(props) {
-    const { user, schedule, fetchSchedule, removeClassFromSchedule } = props;
+    const { user, schedule, setSchedule, removeClassFromSchedule } = props;
 
     function createPrevSchedule(schedule, data) {
         for (const classinst_id in schedule) {
@@ -247,6 +246,22 @@ function Schedule(props) {
     React.useEffect(() => {
         fetchPrevSchedule();
     }, []);
+
+    const fetchSchedule = () => {
+        fetch(`/api/${user.id}`)
+        .then((response) => response.json())
+        .then((result) => {
+        const classes = Object.values(result);
+        classes.sort(function(a,b){
+            return new Date(a.date) - new Date(b.date)
+        });
+        const current = new Date();
+        const filteredClasses = classes.filter(c => new Date(c.date) - current >= 0);
+        const prevClasses = classes.filter(c => new Date(c.date) - current < 0);
+        setSchedule(filteredClasses);
+        setPrevSchedule(prevClasses);
+        });
+    }
 
     const fetchPrevSchedule = () => {
         fetch(`/api/${user.id}`)
