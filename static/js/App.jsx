@@ -1,6 +1,7 @@
 function App() {
     const [classinstances, setClass] = React.useState({});
     const [schedule, setSchedule] = React.useState({});
+    const [prevSchedule, setPrevSchedule] = React.useState({});
 
     const [user, setUser] = React.useState({id: Number(localStorage.getItem("userId")),
                                             fname: localStorage.getItem("userFName"),
@@ -24,7 +25,7 @@ function App() {
             return new Date(a.date) - new Date(b.date)
           });
           const current = new Date();
-          const filteredClasses = classes.filter(c => new Date(c.date) - current > 0);
+          const filteredClasses = classes.filter(c => new Date(c.date) - current >= 0);
           setClass(filteredClasses);
         });
     }, []);
@@ -159,7 +160,7 @@ function App() {
             }),
         });
     }
-
+    
     const fetchSchedule = () => {
       fetch(`/api/${user.id}`)
       .then((response) => response.json())
@@ -168,9 +169,13 @@ function App() {
       classes.sort(function(a,b){
           return new Date(a.date) - new Date(b.date)
       });
-      setSchedule(classes);
+      const current = new Date();
+      const filteredClasses = classes.filter(c => new Date(c.date) - current >= 0);
+      const prevClasses = classes.filter(c => new Date(c.date) - current < 0);
+      setSchedule(filteredClasses);
+      setPrevSchedule(prevClasses);
       });
-  }
+    }
 
   
     return (

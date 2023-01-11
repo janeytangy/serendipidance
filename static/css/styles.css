@@ -168,7 +168,7 @@ a:hover, .nav-link:hover, .navbar-brand:hover {
     position: relative;
 }
 
-#all-classes, #student, #studio, #prevstudio {
+#all-classes, .student, .studio {
     padding: 3% 10%;
 }
 

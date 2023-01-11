@@ -167,10 +167,71 @@ function AllClasses(props) {
 
 function Schedule(props) {
     const { user, schedule, fetchSchedule, removeClassFromSchedule } = props;
-    const tableData = [];
+
+    function createPrevSchedule(schedule, data) {
+        for (const classinst_id in schedule) {
+
+            const newClass = schedule[Number(classinst_id)];
+    
+            data.push(
+            <tr key={classinst_id}>
+                <td>{new Date(newClass.date).toUTCString().split(' ').slice(0, 4).join(' ')}</td>
+                <td>{new Date(newClass.start_time).toLocaleTimeString("en-US", { timeZone: 'UTC', hour: "2-digit", minute: "2-digit", hour12: true })}</td>
+                <td>{new Date(newClass.end_time).toLocaleTimeString("en-US", { timeZone: 'UTC', hour: "2-digit", minute: "2-digit", hour12: true })}</td>
+                <td>${newClass.price.toFixed(2)}</td>
+                <td>{newClass.style}</td>
+                <td>{newClass.level}</td>
+                <td>{newClass.instructor}</td>
+                <td hidden={ user.usertype === "studio" ? true : false }>
+                    <a href={`${newClass.website}`} target="_blank" className="studio-website">
+                        {newClass.studio}
+                    </a>
+                </td>
+            </tr>
+            );
+        }
+    }
+
+    function createSchedule(schedule, data) {
+        for (const classinst_id in schedule) {
+
+            const newClass = schedule[Number(classinst_id)];
+    
+            totalCost += newClass.price;
+    
+            data.push(
+            <tr key={classinst_id}>
+                <td>{new Date(newClass.date).toUTCString().split(' ').slice(0, 4).join(' ')}</td>
+                <td>{new Date(newClass.start_time).toLocaleTimeString("en-US", { timeZone: 'UTC', hour: "2-digit", minute: "2-digit", hour12: true })}</td>
+                <td>{new Date(newClass.end_time).toLocaleTimeString("en-US", { timeZone: 'UTC', hour: "2-digit", minute: "2-digit", hour12: true })}</td>
+                <td>${newClass.price.toFixed(2)}</td>
+                <td>{newClass.style}</td>
+                <td>{newClass.level}</td>
+                <td>{newClass.instructor}</td>
+                <td hidden={user.usertype === "studio" ? true : false}>
+                    <a href={`${newClass.website}`} target="_blank" className="studio-website">
+                        {newClass.studio}
+                    </a>
+                </td>
+                <td>
+                        <button
+                            type="button"
+                            className="btn btn-sm btn-danger d-inline-block"
+                            onClick={() => user.usertype === "student" ? onClick(newClass.classinst_id) : onStudioClick(newClass.classinst_id)}>
+                            Remove
+                        </button>
+                    </td>
+            </tr>
+            );
+        }
+    
+    }
 
     // Student Schedule
 
+    const [ prevSchedule, setPrevSchedule ] = React.useState("");
+    const tableData = [];
+    const prevTableData = [];
     let totalCost = 0;
 
     const onClick = (classinst_id) => {
@@ -183,37 +244,28 @@ function Schedule(props) {
         fetchSchedule();
     }, []);
 
-    for (const classinst_id in schedule) {
+    React.useEffect(() => {
+        fetchPrevSchedule();
+    }, []);
 
-        const newClass = schedule[Number(classinst_id)];
+    const fetchPrevSchedule = () => {
+        fetch(`/api/${user.id}`)
+        .then((response) => response.json())
+        .then((result) => {
+        const classes = Object.values(result);
+        classes.sort(function(a,b){
+            return new Date(a.date) - new Date(b.date)
+        });
+        const current = new Date();
+        const filteredClasses = classes.filter(c => new Date(c.date) - current < 0);
+        setPrevSchedule(filteredClasses);
+        });
+      }
 
-        totalCost += newClass.price;
+    createSchedule(schedule, tableData);
 
-        tableData.push(
-        <tr key={classinst_id}>
-            <td>{new Date(newClass.date).toUTCString().split(' ').slice(0, 4).join(' ')}</td>
-            <td>{new Date(newClass.start_time).toLocaleTimeString("en-US", { timeZone: 'UTC', hour: "2-digit", minute: "2-digit", hour12: true })}</td>
-            <td>{new Date(newClass.end_time).toLocaleTimeString("en-US", { timeZone: 'UTC', hour: "2-digit", minute: "2-digit", hour12: true })}</td>
-            <td>${newClass.price.toFixed(2)}</td>
-            <td>{newClass.style}</td>
-            <td>{newClass.level}</td>
-            <td>{newClass.instructor}</td>
-            <td>
-                <a href={`${newClass.website}`} target="_blank" className="studio-website">
-                    {newClass.studio}
-                </a>
-            </td>
-            <td>
-                    <button
-                        type="button"
-                        className="btn btn-sm btn-danger d-inline-block"
-                        onClick={() => onClick(newClass.classinst_id)}>
-                        Remove
-                    </button>
-                </td>
-        </tr>
-        );
-    }
+    createPrevSchedule(prevSchedule, prevTableData);
+
 
     // Studio Schedule
 
@@ -278,55 +330,9 @@ function Schedule(props) {
         fetchStudioSchedule();
     }, []);
 
-    for (const classinst_id in studioSchedule) {
+    createSchedule(studioSchedule, studioData);
 
-        const newStudioClass = studioSchedule[Number(classinst_id)];
-
-        studioData.push(
-        <tr key={classinst_id}>
-            <td>{new Date(newStudioClass.date).toUTCString().split(' ').slice(0, 4).join(' ')}</td>
-            <td>{new Date(newStudioClass.start_time).toLocaleTimeString("en-US", { timeZone: 'UTC', hour: "2-digit", minute: "2-digit", hour12: true })}</td>
-            <td>{new Date(newStudioClass.end_time).toLocaleTimeString("en-US", { timeZone: 'UTC', hour: "2-digit", minute: "2-digit", hour12: true })}</td>
-            <td>${newStudioClass.price.toFixed(2)}</td>
-            <td>{newStudioClass.style}</td>
-            <td>{newStudioClass.level}</td>
-            <td>{newStudioClass.instructor}</td>
-            <td>
-                    <button
-                        type="button"
-                        className="btn btn-sm btn-danger d-inline-block"
-                        onClick={() => onStudioClick(newStudioClass.classinst_id)}>
-                        Remove
-                    </button>
-                </td>
-        </tr>
-        );
-    }
-
-    for (const classinst_id in prevStudioSchedule) {
-
-        const newStudioClass = prevStudioSchedule[Number(classinst_id)];
-
-        prevStudioData.push(
-        <tr key={classinst_id}>
-            <td>{new Date(newStudioClass.date).toUTCString().split(' ').slice(0, 4).join(' ')}</td>
-            <td>{new Date(newStudioClass.start_time).toLocaleTimeString("en-US", { timeZone: 'UTC', hour: "2-digit", minute: "2-digit", hour12: true })}</td>
-            <td>{new Date(newStudioClass.end_time).toLocaleTimeString("en-US", { timeZone: 'UTC', hour: "2-digit", minute: "2-digit", hour12: true })}</td>
-            <td>${newStudioClass.price.toFixed(2)}</td>
-            <td>{newStudioClass.style}</td>
-            <td>{newStudioClass.level}</td>
-            <td>{newStudioClass.instructor}</td>
-            <td>
-                    <button
-                        type="button"
-                        className="btn btn-sm btn-danger d-inline-block"
-                        onClick={() => onStudioClick(newStudioClass.classinst_id)}>
-                        Remove
-                    </button>
-                </td>
-        </tr>
-        );
-    }
+    createPrevSchedule(prevStudioSchedule, prevStudioData);
 
     function setDate(date) {
         setStartDate(date);
@@ -361,9 +367,9 @@ function Schedule(props) {
     if (user.usertype === "student"){
         return (
             <React.Fragment>
-                <div id="student">
+                <div className="student">
                     <h3 className="classes">Hi, {user.fname}!</h3>
-                    <h4 className="classes">Your Schedule</h4>
+                    <h4 className="classes">Your Current Schedule</h4>
                     <table className="table table-hover">
                     <thead>
                         <tr>
@@ -383,6 +389,24 @@ function Schedule(props) {
                     <div>
                         <h4 className="classes" align="right">Total: ${totalCost.toFixed(2)}</h4>
                     </div>
+                </div>
+                <div className="student">
+                    <h4 className="classes">Past Schedule</h4>
+                    <table className="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Start Time</th>
+                            <th>End Time</th>
+                            <th>Price</th>
+                            <th>Style</th>
+                            <th>Level</th>
+                            <th>Instructor</th>
+                            <th>Studio</th>
+                        </tr>
+                    </thead>
+                    <tbody>{prevTableData}</tbody>
+                    </table>
                 </div>
             </React.Fragment>
         );
@@ -519,7 +543,8 @@ function Schedule(props) {
                     </div>
                 </form>
             </div>
-            <div id="studio">
+            <div className="studio">
+            <h4 className="classes">Current Schedule</h4>
                 <table className="table table-hover">
                 <thead>
                     <tr>
@@ -538,7 +563,8 @@ function Schedule(props) {
                 </tbody>
                 </table>
             </div>
-            <div id="prevstudio">
+            <div className="studio">
+            <h4 className="classes">Past Schedule</h4>
                 <table className="table table-hover">
                 <thead>
                     <tr>
@@ -549,7 +575,6 @@ function Schedule(props) {
                         <th>Style</th>
                         <th>Level</th>
                         <th>Instructor</th>
-                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
