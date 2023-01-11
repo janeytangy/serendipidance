@@ -229,8 +229,7 @@ function Schedule(props) {
     const [studioSchedule, setStudioSchedule] = React.useState("");
     const [prevStudioSchedule, setPrevStudioSchedule] = React.useState("");
 
-    const current = new Date();
-    const today = `${current.getFullYear()}-${current.getMonth()+1}-${current.getDate()}`
+    const today = new Date().toISOString().substring(0,10);
 
     const classOptions = ["Choose below", "One-Time", "Weekly"];
     const styleOptions = ["Choose below", "FOUNDATIONS", "HIPHOP", "KPOP"];
