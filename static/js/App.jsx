@@ -1,7 +1,6 @@
 function App() {
     const [classinstances, setClass] = React.useState({});
     const [schedule, setSchedule] = React.useState({});
-    const [prevSchedule, setPrevSchedule] = React.useState({});
 
     const [user, setUser] = React.useState({id: Number(localStorage.getItem("userId")),
                                             fname: localStorage.getItem("userFName"),
@@ -141,6 +140,8 @@ function App() {
                 class_id: classId
             }),
         });
+        
+        location.reload();
     }
 
     function removeClassFromSchedule(classId) {
@@ -157,7 +158,25 @@ function App() {
         });
     }
 
-  
+    React.useEffect(() => {
+      fetchSchedule();
+    }, []);
+
+    const fetchSchedule = () => {
+        fetch(`/api/${user.id}`)
+        .then((response) => response.json())
+        .then((result) => {
+        const classes = Object.values(result);
+        classes.sort(function(a,b){
+            return new Date(a.date) - new Date(b.date)
+        });
+        const current = new Date();
+        const filteredClasses = classes.filter(c => new Date(c.date) - current >= 0);
+        setSchedule(filteredClasses);
+        });
+    }
+
+
     return (
       <ReactRouterDOM.BrowserRouter>
         <div className="container-fluid">
@@ -170,7 +189,6 @@ function App() {
                 loggedIn={loggedIn}
                 usertype={user.usertype}
                 schedule={schedule}
-                setSchedule={setSchedule}
                 />
           </ReactRouterDOM.Route>
 
@@ -188,7 +206,7 @@ function App() {
           <ReactRouterDOM.Route exact path="/schedule">
             {loggedIn ? <Schedule user={user}
                 schedule={schedule}
-                setSchedule={setSchedule} 
+                setSchedule={setSchedule}
                 removeClassFromSchedule={removeClassFromSchedule} />:
             <ReactRouterDOM.Redirect to='/' />}
           </ReactRouterDOM.Route>

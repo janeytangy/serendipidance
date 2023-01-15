@@ -105,7 +105,8 @@ def add_class_to_schedule(user_id):
     class_id = request.json.get('class_id')
 
     if crud.check_classinstance(user_id, class_id):
-        return "", "401 You've already added this class."
+        # return "", "401 You've already added this class."
+        return class_id
     else:
         userclass = crud.create_userclass(user_id, class_id)
         db.session.add(userclass)
@@ -179,7 +180,6 @@ def remove_studio_class(user_id, class_id):
     db.session.commit()
 
     return redirect("/")
-
 
 
 

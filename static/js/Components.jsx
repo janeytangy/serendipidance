@@ -4,9 +4,8 @@ function ClassRow(props) {
     const [registered, setRegistered] = React.useState("");
 
     React.useEffect(() => {
-        // fetchSchedule();
         checkRegistered();
-    }, []);
+    }, [schedule]);
 
     const checkRegistered = () => {
         for (const classinst_id in schedule) {
@@ -98,7 +97,7 @@ function ClassRow(props) {
         </React.Fragment>
         );
     }
-  }
+}
 
 function AllClasses(props) {
     const { classinstances, addClassToSchedule, loggedIn, usertype, schedule } = props;
@@ -162,7 +161,7 @@ function AllClasses(props) {
         </div>
       </React.Fragment>
     );
-  }
+}
 
 function Schedule(props) {
     const { user, schedule, setSchedule, removeClassFromSchedule } = props;
@@ -858,12 +857,3 @@ function CreateAccount(props) {
     )
     
 }
-
-function Loading() {
-    return (
-      <div className="loading-box">
-        <img src="https://media.tenor.com/Hl4217cjhJAAAAAC/dance-bunny.gif" alt="" />
-        <div>Loading...</div>
-      </div>
-    );
-  }
