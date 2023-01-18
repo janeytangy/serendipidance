@@ -8,13 +8,14 @@ import datetime
 import os
 
 app = Flask(__name__)
+app.secret_key = os.environ["DANCE"]
 
 
 @app.route("/")
 def homepage():
     """Homepage"""
 
-    return render_template("homepage.html", secret=os.environ["DANCE"])
+    return render_template("homepage.html")
 
 @app.route("/<path>")
 def schedule(path):
