@@ -60,9 +60,11 @@ For the next round of features, Serendipidance will have an instructor user type
 <h3 id="install">Installation</h3>
 <h4>To run Serendipidance:</h4>
 Clone or fork this repository:
+
 ```
 https://github.com/janeytangy/serendipidance
 ```
+
 Create and activate a virtual environment:
 ```
 virtualenv env
