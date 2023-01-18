@@ -5,16 +5,16 @@ from flask import (Flask, render_template, request, flash, session,
 from model import connect_to_db, db
 import crud
 import datetime
+import os
 
 app = Flask(__name__)
-app.secret_key = "serendipity"
 
 
 @app.route("/")
 def homepage():
     """Homepage"""
 
-    return render_template("homepage.html")
+    return render_template("homepage.html", secret=os.environ["DANCE"])
 
 @app.route("/<path>")
 def schedule(path):
