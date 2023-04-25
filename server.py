@@ -143,8 +143,8 @@ def add_classinstance_to_schedule(user_id):
     
     start_date = datetime.datetime.strptime(request.json.get('start_date'), "%Y-%m-%d")
     end_date = datetime.datetime.strptime(request.json.get('end_date'), "%Y-%m-%d")
-    start_time = datetime.datetime.strptime(request.json.get('start_time') + ' PST', "%H:%M %Z")
-    end_time = datetime.datetime.strptime(request.json.get('end_time') + ' PST', "%H:%M %Z")
+    start_time = datetime.datetime.strptime(request.json.get('start_time') + ' -0700', "%H:%M %z")
+    end_time = datetime.datetime.strptime(request.json.get('end_time') + ' -0700', "%H:%M %z")
     price = request.json.get('price')
     style = request.json.get('style')
     level = request.json.get('level')

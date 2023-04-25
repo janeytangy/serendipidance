@@ -1,8 +1,8 @@
 [
     {
-        "date": "2023-01-28",
-        "start_time": "19:30 PST",
-        "end_time": "21:30 PST",
+        "date": "2023-05-28",
+        "start_time": "19:30 -0700",
+        "end_time": "21:30 -0700",
         "price": "35",
         "style": "KPOP",
         "level": "BEGINNER",
@@ -12,9 +12,9 @@
         "website": "https://www.eds.dance/"
     },
     {
-        "date": "2023-01-25",
-        "start_time": "20:00 PST",
-        "end_time": "22:00 PST",
+        "date": "2023-05-25",
+        "start_time": "20:00 -0700",
+        "end_time": "22:00 -0700",
         "price": "35",
         "style": "HIPHOP",
         "level": "INTERMEDIATE",
@@ -24,9 +24,9 @@
         "website": "https://www.eds.dance/"
     },
     {
-        "date": "2023-01-25",
-        "start_time": "20:00 PST",
-        "end_time": "21:00 PST",
+        "date": "2023-05-25",
+        "start_time": "20:00 -0700",
+        "end_time": "21:00 -0700",
         "price": "18",
         "style": "HIPHOP",
         "level": "ADVANCED",
@@ -36,9 +36,9 @@
         "website": "https://inthegroovestudios.org/"
     },
     {
-        "date": "2023-01-28",
-        "start_time": "18:00 PST",
-        "end_time": "20:00 PST",
+        "date": "2023-05-28",
+        "start_time": "18:00 -0700",
+        "end_time": "20:00 -0700",
         "price": "50",
         "style": "HIPHOP",
         "level": "MASTER",
@@ -48,9 +48,9 @@
         "website": "https://inthegroovestudios.org/"
     },
     {
-        "date": "2023-01-26",
-        "start_time": "19:15 PST",
-        "end_time": "20:30 PST",
+        "date": "2023-05-26",
+        "start_time": "19:15 -0700",
+        "end_time": "20:30 -0700",
         "price": "28",
         "style": "KPOP",
         "level": "BEGINNER",
@@ -60,9 +60,9 @@
         "website": "https://www.citydancesf.com/"
     },
     {
-        "date": "2023-01-23",
-        "start_time": "20:15 PST",
-        "end_time": "21:45 PST",
+        "date": "2023-05-23",
+        "start_time": "20:15 -0700",
+        "end_time": "21:45 -0700",
         "price": "16",
         "style": "HIPHOP",
         "level": "INTERMEDIATE",
@@ -72,9 +72,9 @@
         "website": "https://ononestudios.com/"
     },
     {
-        "date": "2023-01-23",
-        "start_time": "19:30 PST",
-        "end_time": "21:30 PST",
+        "date": "2023-05-23",
+        "start_time": "19:30 -0700",
+        "end_time": "21:30 -0700",
         "price": "35",
         "style": "KPOP",
         "level": "ADVANCED",
@@ -84,9 +84,9 @@
         "website": "https://www.eds.dance/"
     },
     {
-        "date": "2023-01-23",
-        "start_time": "20:00 PST",
-        "end_time": "21:00 PST",
+        "date": "2023-05-23",
+        "start_time": "20:00 -0700",
+        "end_time": "21:00 -0700",
         "price": "20",
         "style": "FOUNDATIONS",
         "level": "ALL",
@@ -96,9 +96,9 @@
         "website": "https://inthegroovestudios.org/"
     },
     {
-        "date": "2023-01-24",
-        "start_time": "18:30 PST",
-        "end_time": "19:45 PST",
+        "date": "2023-05-24",
+        "start_time": "18:30 -0700",
+        "end_time": "19:45 -0700",
         "price": "28",
         "style": "FOUNDATIONS",
         "level": "ALL",
@@ -108,9 +108,9 @@
         "website": "https://www.citydancesf.com/"
     },
     {
-        "date": "2023-01-24",
-        "start_time": "19:30 PST",
-        "end_time": "20:30 PST",
+        "date": "2023-05-24",
+        "start_time": "19:30 -0700",
+        "end_time": "20:30 -0700",
         "price": "50",
         "style": "HIPHOP",
         "level": "MASTER",
@@ -120,9 +120,9 @@
         "website": "https://inthegroovestudios.org/"
     },
     {
-        "date": "2023-01-25",
-        "start_time": "18:30 PST",
-        "end_time": "19:30 PST",
+        "date": "2023-05-25",
+        "start_time": "18:30 -0700",
+        "end_time": "19:30 -0700",
         "price": "16",
         "style": "HIPHOP",
         "level": "ADVANCED",

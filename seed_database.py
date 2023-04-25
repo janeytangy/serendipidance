@@ -40,8 +40,8 @@ for dance in danceclass_data:
     studios_in_file.append((studio, website))
 
     date = datetime.datetime.strptime(dance["date"], "%Y-%m-%d")
-    start_time = datetime.datetime.strptime(dance["start_time"], "%H:%M %Z")
-    end_time = datetime.datetime.strptime(dance["end_time"], "%H:%M %Z")
+    start_time = datetime.datetime.strptime(dance["start_time"], "%H:%M %z")
+    end_time = datetime.datetime.strptime(dance["end_time"], "%H:%M %z")
 
     danceclass_in_db.append(crud.create_classinstance(date, 
             start_time, end_time, price, style, level, instructor, studio, website))
